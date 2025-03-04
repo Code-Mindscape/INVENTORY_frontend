@@ -21,7 +21,7 @@ const LoginPage = () => {
     setMessage("");
 
     try {
-      const response = await fetch(`${process.env.BACKEND_URL}/admin-login`, {
+      const response = await fetch(`${process.env.BACKEN_URL}/admin-login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(credentials),
