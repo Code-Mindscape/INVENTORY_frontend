@@ -56,7 +56,7 @@ const WorkerLoginPage = () => {
 
         {/* Username Field */}
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-sm font-medium text-black mb-2">
             Username
           </label>
           <input
@@ -73,7 +73,7 @@ const WorkerLoginPage = () => {
 
         {/* Password Field */}
         <div className="mb-6">
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-sm font-medium text-black mb-2">
             Password
           </label>
           <input
