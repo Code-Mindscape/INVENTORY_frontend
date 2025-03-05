@@ -7,7 +7,8 @@ const OrdersTable = () => {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/order/allOrders` ||"http://localhost:5000/order/allOrders", {
+        const backendUrl = process.env.REACT_APP_BACKEND_URL || "http://localhost:5000";
+        const response = await fetch(`${backendUrl}/order/allOrders`, {
           credentials: "include",
         });
         const data = await response.json();

@@ -19,9 +19,9 @@ const LoginPage = () => {
     setLoading(true);
     setError("");
     setMessage("");
-
+    const backendUrl = process.env.REACT_APP_BACKEND_URL || "http://localhost:5000";
     try {
-      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/admin-login` || "http://localhost:5000/admin-login", {
+      const response = await fetch(`${backendUrl}/admin-login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(credentials),
