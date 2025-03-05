@@ -19,7 +19,7 @@ const LoginPage = () => {
     setLoading(true);
     setError("");
     setMessage("");
-    
+
     try {
       const response = await fetch(`https://inventorybackend-production-6c3c.up.railway.app/admin-login`, {
         method: "POST",
@@ -47,35 +47,35 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="h-screen flex items-center justify-center bg-gray-100">
+    <div className="h-screen flex items-center justify-center bg-gray-100 relative px-4">
       <form
         onSubmit={handleSubmit}
-        className="bg-white p-8 rounded-xl shadow-md w-full max-w-sm"
+        className="bg-white p-8 rounded-xl shadow-md w-full max-w-sm border border-gray-300"
       >
-        <h2 className="text-2xl font-bold text-center mb-6">Admin Login</h2>
+        <h2 className="text-2xl font-bold text-center text-black mb-6">Admin Login</h2>
 
         {error && <p className="text-red-500 text-sm text-center mb-4">⚠️ {error}</p>}
         {message && <p className="text-green-500 text-sm text-center mb-4">✅ {message}</p>}
 
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700 mb-2">Username</label>
+          <label className="block text-sm font-medium text-black mb-2">Username</label>
           <input
             type="text"
             value={credentials.username}
             onChange={(e) => setCredentials({ ...credentials, username: e.target.value })}
-            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-400"
+            className="w-full px-4 py-2 border border-gray-400 rounded-lg focus:ring-2 focus:ring-blue-400 outline-none"
             placeholder="Enter username"
             required
           />
         </div>
 
         <div className="mb-6">
-          <label className="block text-sm font-medium text-gray-700 mb-2">Password</label>
+          <label className="block text-sm font-medium text-black mb-2">Password</label>
           <input
             type="password"
             value={credentials.password}
             onChange={(e) => setCredentials({ ...credentials, password: e.target.value })}
-            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-400"
+            className="w-full px-4 py-2 border border-gray-400 rounded-lg focus:ring-2 focus:ring-blue-400 outline-none"
             placeholder="••••••••"
             required
           />

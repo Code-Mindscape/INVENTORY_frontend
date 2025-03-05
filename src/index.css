@@ -1,2 +1,6 @@
 @import "tailwindcss";
 @plugin "daisyui";
+
+html {
+    -webkit-text-size-adjust: 100%;
+  }
