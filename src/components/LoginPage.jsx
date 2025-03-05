@@ -19,7 +19,7 @@ const LoginPage = () => {
     setLoading(true);
     setError("");
     setMessage("");
-    const backendUrl = process.env.REACT_APP_BACKEND_URL || "http://localhost:5000";
+    const backendUrl = process.env.VITE_BACKEND_URL || "http://localhost:5000";
     console.log(backendUrl);
     
     try {
