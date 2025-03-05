@@ -8,11 +8,8 @@ const OrdersTable = () => {
     const fetchOrders = async () => {
       try {
         // const backendUrl = process.env.VITE_BACKEND_URL || "http://localhost:5000";
-        const backendUrl = "https://inventorybackend-production-6c3c.up.railway.app/";
-
-        console.log(backendUrl);
         
-        const response = await fetch(`${backendUrl}/order/allOrders`, {
+        const response = await fetch(`https://inventorybackend-production-6c3c.up.railway.app/order/allOrder`, {
           credentials: "include",
         });
         const data = await response.json();
@@ -36,7 +33,7 @@ const OrdersTable = () => {
 
   const handleDeliveredChange = async (orderId, isChecked) => {
     try {
-      const response = await fetch(`${process.env.VITE_BACKEND_URL}/order/updateOrder/${orderId}` || `http://localhost:5000/order/updateOrder/${orderId}`, {
+      const response = await fetch(`https://inventorybackend-production-6c3c.up.railway.app/order/updateOrder/${orderId}` || `http://localhost:5000/order/updateOrder/${orderId}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ delivered: isChecked }),

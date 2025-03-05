@@ -38,7 +38,7 @@ const AddOrder = ({ onClose, onOrderAdded }) => {
     }
 
     try {
-      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/order/addOrder` || "http://localhost:5000/order/addOrder", {
+      const response = await fetch(`https://inventorybackend-production-6c3c.up.railway.app/order/addOrder` || "http://localhost:5000/order/addOrder", {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
