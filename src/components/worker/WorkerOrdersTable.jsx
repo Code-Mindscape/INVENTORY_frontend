@@ -3,7 +3,6 @@ import AddOrder from "./AddOrder";
 
 const WorkerOrdersTable = () => {
   const [orders, setOrders] = useState([]);
-  const [username, setUsername] = useState("");
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false); // ✅ Define isModalOpen state
 
@@ -16,7 +15,6 @@ const WorkerOrdersTable = () => {
         const data = await response.json();
         if (Array.isArray(data.myOrders)) {
           setOrders(data.myOrders);
-          setUsername(data.workername)
 
         } else {
           console.error("Unexpected API response format:", data);
@@ -73,7 +71,6 @@ const WorkerOrdersTable = () => {
               <th>COD</th>
               <th>Description</th>
               <th>Delivered</th>
-              <th>Worker ID</th>
             </tr>
           </thead>
           <tbody>
@@ -88,7 +85,6 @@ const WorkerOrdersTable = () => {
                 <td>{order.cod}</td>
                 <td>{order.description}</td>
                 <td>{order.delivered ? "✔" : "❌"}</td>
-                <td>{username}</td>
               </tr>
             ))}
           </tbody>
