@@ -12,7 +12,7 @@ const ProtectedRoute = ({ children }) => {
     const checkAuth = async () => {
       try {
         const res = await fetch(`https://inventorybackend-production-6c3c.up.railway.app/check-auth` || "http://localhost:5000/check-auth", {
-          withCredentials: true, 
+          credentials: "include",
           signal: controller.signal,
         });
 
