@@ -19,8 +19,6 @@ const LoginPage = () => {
     setLoading(true);
     setError("");
     setMessage("");
-    // const backendUrl = process.env.VITE_BACKEND_URL || "http://localhost:5000";
-
     
     try {
       const response = await fetch(`https://inventorybackend-production-6c3c.up.railway.app/admin-login`, {
