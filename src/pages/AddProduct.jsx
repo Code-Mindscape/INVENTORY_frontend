@@ -1,142 +1,141 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
-const OrdersTable = () => {
-  const [orders, setOrders] = useState([]);
-  const [loading, setLoading] = useState(true);
+const AddProduct = ({ onClose, onProductAdded }) => {
+  const [formData, setFormData] = useState({
+    name: "",
+    price: "",
+    description: "",
+    stock: "",
+    size: "",
+    color: "",
+  });
 
-  useEffect(() => {
-    const fetchOrders = async () => {
-      try {
-        const response = await fetch(
-          `https://inventorybackend-production-6c3c.up.railway.app/order/allOrders`,
-          {
-            credentials: "include",
-          }
-        );
-        const data = await response.json();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
-        if (Array.isArray(data.orders)) {
-          setOrders(data.orders);
-        } else {
-          console.error("Unexpected API response format:", data);
-          setOrders([]);
-        }
-      } catch (error) {
-        console.error("Error fetching orders:", error);
-        setOrders([]);
-      } finally {
-        setLoading(false);
-      }
-    };
+  // Handle input changes
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
 
-    fetchOrders();
-  }, []);
-
-  const handleDeliveredChange = async (orderId, isChecked) => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError("");
+  
+    if (!formData.name || !formData.price || !formData.stock) {
+      setError("Name, Price, and Stock are required.");
+      setLoading(false);
+      return;
+    }
+  
     try {
-      const response = await fetch(
-        `https://inventorybackend-production-6c3c.up.railway.app/order/updateOrder/${orderId}`,
-        {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ delivered: isChecked }),
-          credentials: "include",
-        }
-      );
-
-      const responseText = await response.text();
-      console.log("Raw Response:", responseText);
-
-      try {
-        const responseData = JSON.parse(responseText);
-        if (!response.ok) {
-          console.error("Server Response:", responseData);
-          throw new Error(
-            `Failed to update order status: ${
-              responseData.message || "Unknown error"
-            }`
-          );
-        }
-
-        setOrders((prevOrders) =>
-          prevOrders.map((order) =>
-            order._id === orderId ? { ...order, delivered: isChecked } : order
-          )
-        );
-      } catch (jsonError) {
-        console.error("Response is not JSON. Possible authentication issue.");
+      const response = await fetch(`https://inventorybackend-production-6c3c.up.railway.app/product/addProduct` || "http://localhost:5000/product/addProduct", {
+        method: "POST",
+        credentials: "include",  // ✅ Ensures cookies are sent
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: formData.name,
+          price: Number(formData.price),
+          stock: Number(formData.stock),
+          size: formData.size || null,
+          color: formData.color || null,
+          description: formData.description || "",
+        }),
+      });
+  
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Failed to add product.");
       }
-    } catch (error) {
-      console.error("Error updating order status:", error);
+  
+      onProductAdded();
+      onClose();
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="overflow-auto mt-16 p-4">
-      {loading ? (
-        <div className="flex justify-center items-center py-10">
-          <span className="loading loading-spinner loading-lg"></span>
+    <div className="p-6 rounded-lg shadow-lg w-full max-w-md z-10" >
+      <h2 className="text-lg font-semibold mb-4">Add Product</h2>
+
+      {error && <p className="text-red-500 text-sm mb-2">{error}</p>}
+
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <input
+          type="text"
+          name="name"
+          value={formData.name}
+          onChange={handleChange}
+          placeholder="Product Name"
+          className="w-full p-2 border rounded-md"
+          required
+        />
+        <input
+          type="number"
+          name="price"
+          value={formData.price}
+          onChange={handleChange}
+          placeholder="Price"
+          className="w-full p-2 border rounded-md"
+          required
+        />
+        <input
+          type="number"
+          name="stock"
+          value={formData.stock}
+          onChange={handleChange}
+          placeholder="Stock"
+          className="w-full p-2 border rounded-md"
+          required
+        />
+        <input
+          type="text"
+          name="size"
+          value={formData.size}
+          onChange={handleChange}
+          placeholder="Size (Optional)"
+          className="w-full p-2 border rounded-md"
+        />
+        <input
+          type="text"
+          name="color"
+          value={formData.color}
+          onChange={handleChange}
+          placeholder="Color (Optional)"
+          className="w-full p-2 border rounded-md"
+        />
+        <textarea
+          name="description"
+          value={formData.description}
+          onChange={handleChange}
+          placeholder="Description (Optional)"
+          className="w-full p-2 border rounded-md"
+        ></textarea>
+
+        <div className="flex justify-between mt-4">
+          <button
+            type="button"
+            className="bg-gray-400 text-white px-4 py-2 rounded-md"
+            onClick={onClose}
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            className="bg-blue-500 text-white px-4 py-2 rounded-md"
+            disabled={loading}
+          >
+            {loading ? "Adding..." : "Add Product"}
+          </button>
         </div>
-      ) : (
-        <div className="w-full">
-          <table className="table table-md w-full min-w-[600px]">
-            <thead>
-              <tr className="bg-gray-100 text-gray-800 text-xs sm:text-sm">
-                <th>#</th>
-                <th>Customer</th>
-                <th>Product</th>
-                <th>Qty</th>
-                <th>Address</th>
-                <th>Contact</th>
-                <th>COD</th>
-                <th>Description</th>
-                <th>Delivered</th>
-                <th>Worker</th>
-              </tr>
-            </thead>
-            <tbody className="text-xs sm:text-sm text-black">
-              {orders.map((order, index) => (
-                <tr key={index} className="border-b">
-                  <td className="px-2 py-1">{index + 1}</td>
-                  <td className="px-2 py-1 break-words">{order.customerName}</td>
-                  <td className="px-2 py-1 break-words">
-                    {order.productID?.name || "N/A"}
-                  </td>
-                  <td className="px-2 py-1">{order.quantity}</td>
-                  <td className="px-2 py-1 break-words">{order.address}</td>
-                  <td className="px-2 py-1">
-                    <a
-                      href={`https://wa.me/${order.contact}`}
-                      className="text-green-500 break-words"
-                    >
-                      {order.contact} (WhatsApp)
-                    </a>
-                  </td>
-                  <td className="px-2 py-1">{order.cod ? "Yes" : "No"}</td>
-                  <td className="px-2 py-1 break-words">
-                    {order.description || "N/A"}
-                  </td>
-                  <td className="px-2 py-1">
-                    <input
-                      type="checkbox"
-                      className="checkbox"
-                      checked={order.delivered}
-                      onChange={(e) =>
-                        handleDeliveredChange(order._id, e.target.checked)
-                      }
-                    />
-                  </td>
-                  <td className="px-2 py-1 break-words">
-                    {order.workerID?.username || "Unknown Worker"}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
+      </form>
     </div>
   );
 };
 
-export default OrdersTable;
+export default AddProduct;
