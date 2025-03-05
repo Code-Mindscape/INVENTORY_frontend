@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 const NAV_LINKS = [
   { name: "Orders", href: "/admin/orders" },
   { name: "Inventory", href: "/admin/inventory" },
-  { name: "New Worker", href: "https://inventorybackend-production-6c3c.up.railway.app/worker-register3453"}
+  { name: "New Worker", href: "/admin/worker-register3543"}
 ];
 
 function NavBar() {
