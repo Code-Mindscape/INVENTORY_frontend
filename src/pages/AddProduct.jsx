@@ -60,7 +60,7 @@ const AddProduct = ({ onClose, onProductAdded }) => {
   };
 
   return (
-    <div className="p-6 rounded-lg shadow-lg w-full max-w-md">
+    <div className="p-6 rounded-lg shadow-lg w-full max-w-md z-10" >
       <h2 className="text-lg font-semibold mb-4">Add Product</h2>
 
       {error && <p className="text-red-500 text-sm mb-2">{error}</p>}

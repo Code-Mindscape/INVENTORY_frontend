@@ -31,7 +31,7 @@ const OrdersTable = () => {
 
   const handleDeliveredChange = async (orderId, isChecked) => {
     try {
-      const response = await fetch(`${process.env.BACKEND_URL}/order/updateOrder/${orderId}`, {
+      const response = await fetch(`http://localhost:5000/order/updateOrder/${orderId}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ delivered: isChecked }),
@@ -64,13 +64,6 @@ const OrdersTable = () => {
   
   return (
     <div className="overflow-x-auto mt-16 p-4">
-      <div className="flex justify-end mb-4">
-        <button
-          className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-semibold shadow-md"
-        >
-          Add Order
-        </button>
-      </div>
 
       {loading ? (
         <div className="flex justify-center items-center py-10">

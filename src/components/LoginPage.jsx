@@ -21,7 +21,7 @@ const LoginPage = () => {
     setMessage("");
 
     try {
-      const response = await fetch(`https://inventorybackend-production-6c3c.up.railway.app/admin-login`, {
+      const response = await fetch("http://localhost:5000/admin-login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(credentials),
@@ -38,7 +38,7 @@ const LoginPage = () => {
       localStorage.setItem("isAuthenticated", "true");
 
       setMessage("Login successful! Redirecting...");
-      setTimeout(() => navigate(`${process.env.BACKEN_URL}/admin/orders`), 1500); // ✅ Smooth redirection
+      setTimeout(() => navigate("/admin/orders"), 1500); // ✅ Smooth redirection
     } catch (err) {
       setError(err.message);
     } finally {

@@ -11,7 +11,7 @@ function NavBar() {
   useEffect(() => {
     const fetchUsername = async () => {
       try {
-        const response = await fetch(`${process.env.BACKEND_URL}/check-auth`, { credentials: "include" });
+        const response = await fetch("http://localhost:5000/check-auth", { credentials: "include" });
     
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
@@ -40,13 +40,11 @@ function NavBar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <h1 className="text-white text-xl font-bold">
           {username ? (
             <h1 className="text-white text-md font-medium">{username}</h1>
           ) : (
             <h1 className="text-gray-400 text-sm">Not logged in</h1>
           )}
-          </h1>
 
           {/* Navigation Links */}
           <div className="hidden md:flex space-x-4">
