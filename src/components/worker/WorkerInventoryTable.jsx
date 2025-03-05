@@ -7,7 +7,10 @@ const WorkerInventoryTable = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch(`https://inventorybackend-production-6c3c.up.railway.app/product/allProducts` || "http://localhost:5000/product/allProducts");
+        const response = await fetch(
+          `https://inventorybackend-production-6c3c.up.railway.app/product/allProducts` || 
+          "http://localhost:5000/product/allProducts"
+        );
         const data = await response.json();
 
         if (Array.isArray(data.products)) {
@@ -36,7 +39,7 @@ const WorkerInventoryTable = () => {
       ) : (
         <table className="table table-md w-full">
           <thead>
-            <tr>
+            <tr className="text-black">
               <th>#</th>
               <th>Product ID</th>
               <th>Product Name</th>
@@ -49,7 +52,7 @@ const WorkerInventoryTable = () => {
           </thead>
           <tbody>
             {products.map((item, index) => (
-              <tr key={index}>
+              <tr key={index} className="text-black">
                 <th>{index + 1}</th>
                 <td>{item._id}</td>
                 <td>{item.name}</td>
