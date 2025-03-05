@@ -123,7 +123,7 @@ const OrdersTable = () => {
                   <td className="px-2 py-1">
                     <input
                       type="checkbox"
-                      className="checkbox"
+                      className="checkbox bg-black"
                       checked={order.delivered}
                       onChange={(e) =>
                         handleDeliveredChange(order._id, e.target.checked)
