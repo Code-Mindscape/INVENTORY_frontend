@@ -4,18 +4,19 @@ import AddOrder from "./AddOrder";
 const WorkerOrdersTable = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [isModalOpen, setIsModalOpen] = useState(false); // ✅ Define isModalOpen state
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const response = await fetch(`https://inventorybackend-production-6c3c.up.railway.app/order/my-orders` || "http://localhost:5000/order/my-orders", 
-        {credentials: "include"}
+        const response = await fetch(
+          `https://inventorybackend-production-6c3c.up.railway.app/order/my-orders` || 
+          "http://localhost:5000/order/my-orders",
+          { credentials: "include" }
         );
         const data = await response.json();
         if (Array.isArray(data.myOrders)) {
           setOrders(data.myOrders);
-
         } else {
           console.error("Unexpected API response format:", data);
           setOrders([]);
@@ -33,12 +34,13 @@ const WorkerOrdersTable = () => {
 
   return (
     <div className="overflow-x-auto mt-16">
+      {/* Modal for Adding Orders */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-1 flex items-center justify-center bg-black bg-opacity-50">
+        <div className="fixed inset-0 z-10 flex items-center justify-center bg-black bg-opacity-50">
           <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
             <AddOrder
               onClose={() => setIsModalOpen(false)}
-              onOrderAdded={() => window.location.reload()} // ✅ Refresh orders after adding
+              onOrderAdded={() => window.location.reload()} // Refresh orders after adding
             />
           </div>
         </div>
@@ -61,7 +63,7 @@ const WorkerOrdersTable = () => {
       ) : (
         <table className="table table-md w-full">
           <thead>
-            <tr>
+            <tr className="text-black">
               <th>#</th>
               <th>Customer</th>
               <th>Product Name</th>
@@ -75,13 +77,17 @@ const WorkerOrdersTable = () => {
           </thead>
           <tbody>
             {orders.map((order, index) => (
-              <tr key={index}>
+              <tr key={index} className="text-black">
                 <th>{index + 1}</th>
                 <td>{order.customerName}</td>
-                <td>{order.productID.name }</td>
+                <td>{order.productID.name}</td>
                 <td>{order.quantity}</td>
                 <td>{order.address}</td>
-                <td><a href={`https://wa.me/${order.contact}`}>{order.contact} <span className="text-green-500" >WhatsApp</span></a></td>
+                <td>
+                  <a href={`https://wa.me/${order.contact}`} className="text-black">
+                    {order.contact} <span className="text-green-500">WhatsApp</span>
+                  </a>
+                </td>
                 <td>{order.cod}</td>
                 <td>{order.description}</td>
                 <td>{order.delivered ? "✔" : "❌"}</td>
