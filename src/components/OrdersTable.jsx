@@ -9,7 +9,7 @@ const OrdersTable = () => {
       try {
         // const backendUrl = process.env.VITE_BACKEND_URL || "http://localhost:5000";
         
-        const response = await fetch(`https://inventorybackend-production-6c3c.up.railway.app/order/allOrder`, {
+        const response = await fetch(`https://inventorybackend-production-6c3c.up.railway.app/order/allOrders`, {
           credentials: "include",
         });
         const data = await response.json();
