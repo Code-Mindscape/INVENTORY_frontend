@@ -8,6 +8,8 @@ const OrdersTable = () => {
     const fetchOrders = async () => {
       try {
         const backendUrl = process.env.REACT_APP_BACKEND_URL || "http://localhost:5000";
+        console.log(backendUrl);
+        
         const response = await fetch(`${backendUrl}/order/allOrders`, {
           credentials: "include",
         });
