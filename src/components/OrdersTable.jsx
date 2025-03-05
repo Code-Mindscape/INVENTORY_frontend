@@ -34,7 +34,7 @@ const OrdersTable = () => {
 
   const handleDeliveredChange = async (orderId, isChecked) => {
     try {
-      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/order/updateOrder/${orderId}` || `http://localhost:5000/order/updateOrder/${orderId}`, {
+      const response = await fetch(`${process.env.VITE_BACKEND_URL}/order/updateOrder/${orderId}` || `http://localhost:5000/order/updateOrder/${orderId}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ delivered: isChecked }),
