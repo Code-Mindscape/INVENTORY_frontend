@@ -58,7 +58,7 @@ const WorkerOrdersTable = () => {
 
       {loading ? (
         <div className="flex justify-center items-center py-10">
-          <span className="loading loading-spinner loading-lg"></span>
+          <span className="loading loading-spinner bg-black loading-lg"></span>
         </div>
       ) : (
         <table className="table table-md w-full">
