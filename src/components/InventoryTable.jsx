@@ -10,7 +10,7 @@ const InventoryTable = () => {
   const fetchProducts = async () => {
     setLoading(true);
     try {
-      const response = await fetch("http://localhost:5000/product/allProducts", {
+      const response = await fetch(`${process.env.BACKEND_URL}/product/allProducts` ||"http://localhost:5000/product/allProducts", {
         credentials: "include",
       });
       const data = await response.json();

@@ -7,7 +7,7 @@ const OrdersTable = () => {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const response = await fetch("http://localhost:5000/order/allOrders", {
+        const response = await fetch(`${process.env.BACKEND_URL}/order/allOrders` ||"http://localhost:5000/order/allOrders", {
           credentials: "include",
         });
         const data = await response.json();
@@ -31,7 +31,7 @@ const OrdersTable = () => {
 
   const handleDeliveredChange = async (orderId, isChecked) => {
     try {
-      const response = await fetch(`http://localhost:5000/order/updateOrder/${orderId}`, {
+      const response = await fetch(`${process.env.BACKEND_URL}/order/updateOrder/${orderId}` || `http://localhost:5000/order/updateOrder/${orderId}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ delivered: isChecked }),

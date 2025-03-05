@@ -11,7 +11,7 @@ function NavBar() {
   useEffect(() => {
     const fetchUsername = async () => {
       try {
-        const response = await fetch("http://localhost:5000/check-auth", { credentials: "include" });
+        const response = await fetch(`${process.env.BACKEND_URL}/check-auth` ||"http://localhost:5000/check-auth", { credentials: "include" });
     
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);

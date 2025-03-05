@@ -25,7 +25,7 @@ const WorkerRegisterPage = () => {
     setError("");
 
     try {
-      const response = await fetch("http://localhost:5000/worker-register", {
+      const response = await fetch(`${process.env.BACKEND_URL}/worker-register` || "http://localhost:5000/worker-register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password }),

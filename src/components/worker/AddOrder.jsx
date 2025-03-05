@@ -38,7 +38,7 @@ const AddOrder = ({ onClose, onOrderAdded }) => {
     }
 
     try {
-      const response = await fetch("http://localhost:5000/order/addOrder", {
+      const response = await fetch(`${process.env.BACKEND_URL}/order/addOrder` || "http://localhost:5000/order/addOrder", {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
