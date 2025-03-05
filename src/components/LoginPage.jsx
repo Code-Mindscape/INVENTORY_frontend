@@ -47,53 +47,21 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="h-screen flex items-center justify-center bg-gray-100 relative px-4">
-      <form
-        onSubmit={handleSubmit}
-        className="bg-white p-8 rounded-xl shadow-md w-full max-w-sm border border-gray-300"
-      >
-        <h2 className="text-2xl font-bold text-center text-black mb-6">Admin Login</h2>
+<div className="h-screen flex items-center justify-center bg-gray-200">
+  <form className="bg-white p-8 rounded-xl shadow-md w-full max-w-sm border border-black text-black">
+    <h2 className="text-2xl font-bold text-center !text-black !opacity-100">Test Login</h2>
+    
+    <label className="block text-sm font-medium text-black mb-2">Username</label>
+    <input type="text" className="w-full px-4 py-2 border border-black text-black bg-white" />
 
-        {error && <p className="text-red-500 text-sm text-center mb-4">⚠️ {error}</p>}
-        {message && <p className="text-green-500 text-sm text-center mb-4">✅ {message}</p>}
+    <label className="block text-sm font-medium text-black mb-2 mt-4">Password</label>
+    <input type="password" className="w-full px-4 py-2 border border-black text-black bg-white" />
 
-        <div className="mb-4">
-          <label className="block text-sm font-medium text-black mb-2">Username</label>
-          <input
-            type="text"
-            value={credentials.username}
-            onChange={(e) => setCredentials({ ...credentials, username: e.target.value })}
-            className="w-full px-4 py-2 border border-gray-400 rounded-lg focus:ring-2 focus:ring-blue-400 outline-none"
-            placeholder="Enter username"
-            required
-          />
-        </div>
-
-        <div className="mb-6">
-          <label className="block text-sm font-medium text-black mb-2">Password</label>
-          <input
-            type="password"
-            value={credentials.password}
-            onChange={(e) => setCredentials({ ...credentials, password: e.target.value })}
-            className="w-full px-4 py-2 border border-gray-400 rounded-lg focus:ring-2 focus:ring-blue-400 outline-none"
-            placeholder="••••••••"
-            required
-          />
-        </div>
-
-        <a className="text-blue-600 underline text-sm block text-center mb-4" href="/worker-login">
-          Worker Login
-        </a>
-
-        <button
-          type="submit"
-          disabled={loading}
-          className="w-full bg-blue-800 text-white py-2 rounded-lg hover:bg-blue-600 transition disabled:bg-gray-400"
-        >
-          {loading ? "Signing In..." : "Login"}
-        </button>
-      </form>
-    </div>
+    <button className="w-full bg-blue-800 text-white py-2 rounded-lg mt-4">
+      Login
+    </button>
+  </form>
+</div>
   );
 };
 
