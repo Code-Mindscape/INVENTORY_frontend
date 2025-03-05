@@ -25,7 +25,7 @@ const WorkerRegisterPage = () => {
     setError("");
 
     try {
-      const response = await fetch(`https://inventorybackend-production-6c3c.up.railway.app/worker-register` || "http://localhost:5000/worker-register", {
+      const response = await fetch(`c` || "http://localhost:5000/worker-register3453", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password }),
