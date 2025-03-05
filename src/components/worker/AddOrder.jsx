@@ -125,18 +125,6 @@ const AddOrder = ({ onClose, onOrderAdded }) => {
           />
         </div>
 
-        {/* Delivered Checkbox */}
-        <div className="flex items-center space-x-2">
-          <input
-            type="checkbox"
-            name="delivered"
-            checked={formData.delivered}
-            onChange={handleChange}
-            className="h-4 w-4 text-blue-500 border-gray-300 rounded focus:ring-blue-500"
-          />
-          <label className="text-sm text-gray-700">Mark as Delivered</label>
-        </div>
-
         {/* Action Buttons */}
         <div className="flex justify-between mt-4">
           <button
