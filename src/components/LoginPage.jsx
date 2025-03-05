@@ -20,7 +20,7 @@ const LoginPage = () => {
     setError("");
     setMessage("");
     // const backendUrl = process.env.VITE_BACKEND_URL || "http://localhost:5000";
-    const backendUrl = "https://inventorybackend-production-6c3c.up.railway.app/";
+    const backendUrl = "https://inventorybackend-production-6c3c.up.railway.app";
     console.log(backendUrl);
     
     try {
