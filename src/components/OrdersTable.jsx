@@ -75,7 +75,7 @@ const OrdersTable = () => {
     <div className="overflow-auto mt-16 p-4">
       {loading ? (
         <div className="flex justify-center items-center py-10">
-          <span className="loading loading-spinner loading-lg"></span>
+          <span className="loading loading-spinner bg-black loading-lg"></span>
         </div>
       ) : (
         <div className="w-full">
