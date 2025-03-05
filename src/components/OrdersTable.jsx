@@ -96,7 +96,7 @@ const OrdersTable = () => {
             </thead>
             <tbody className="text-xs sm:text-sm">
               {orders.map((order, index) => (
-                <tr key={index} className="border-b">
+                <tr key={index} className="border-b text-black">
                   <td className="px-2 py-1">{index + 1}</td>
                   <td className="px-2 py-1 break-words whitespace-normal">
                     {order.customerName}
