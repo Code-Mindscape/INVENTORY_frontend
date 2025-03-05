@@ -7,7 +7,9 @@ const OrdersTable = () => {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const backendUrl = process.env.VITE_BACKEND_URL || "http://localhost:5000";
+        // const backendUrl = process.env.VITE_BACKEND_URL || "http://localhost:5000";
+        const backendUrl = "https://inventorybackend-production-6c3c.up.railway.app/";
+
         console.log(backendUrl);
         
         const response = await fetch(`${backendUrl}/order/allOrders`, {
