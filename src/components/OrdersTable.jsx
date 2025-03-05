@@ -7,11 +7,12 @@ const OrdersTable = () => {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        // const backendUrl = process.env.VITE_BACKEND_URL || "http://localhost:5000";
-        
-        const response = await fetch(`https://inventorybackend-production-6c3c.up.railway.app/order/allOrders`, {
-          credentials: "include",
-        });
+        const response = await fetch(
+          `https://inventorybackend-production-6c3c.up.railway.app/order/allOrders`,
+          {
+            credentials: "include",
+          }
+        );
         const data = await response.json();
 
         if (Array.isArray(data.orders)) {
@@ -33,23 +34,30 @@ const OrdersTable = () => {
 
   const handleDeliveredChange = async (orderId, isChecked) => {
     try {
-      const response = await fetch(`https://inventorybackend-production-6c3c.up.railway.app/order/updateOrder/${orderId}` || `http://localhost:5000/order/updateOrder/${orderId}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ delivered: isChecked }),
-        credentials: "include",
-      });
-  
-      const responseText = await response.text(); // Read response as text
-      console.log("Raw Response:", responseText); // Log raw response
-  
+      const response = await fetch(
+        `https://inventorybackend-production-6c3c.up.railway.app/order/updateOrder/${orderId}`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ delivered: isChecked }),
+          credentials: "include",
+        }
+      );
+
+      const responseText = await response.text();
+      console.log("Raw Response:", responseText);
+
       try {
-        const responseData = JSON.parse(responseText); // Attempt to parse JSON
+        const responseData = JSON.parse(responseText);
         if (!response.ok) {
           console.error("Server Response:", responseData);
-          throw new Error(`Failed to update order status: ${responseData.message || "Unknown error"}`);
+          throw new Error(
+            `Failed to update order status: ${
+              responseData.message || "Unknown error"
+            }`
+          );
         }
-  
+
         setOrders((prevOrders) =>
           prevOrders.map((order) =>
             order._id === orderId ? { ...order, delivered: isChecked } : order
@@ -62,59 +70,74 @@ const OrdersTable = () => {
       console.error("Error updating order status:", error);
     }
   };
-  
-  
-  return (
-    <div className="overflow-x-auto mt-16 p-4">
 
+  return (
+    <div className="overflow-auto mt-16 p-4">
       {loading ? (
         <div className="flex justify-center items-center py-10">
           <span className="loading loading-spinner loading-lg"></span>
         </div>
       ) : (
-        <table className="table table-md w-full">
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Customer</th>
-              <th>Product Name</th>
-              <th>Quantity</th>
-              <th>Address</th>
-              <th>Contact</th>
-              <th>COD</th>
-              <th>Description</th>
-              <th>Delivered</th>
-              <th>Worker</th>
-            </tr>
-          </thead>
-          <tbody>
-            {orders.map((order, index) => (
-              <tr key={index}>
-                <th>{index + 1}</th>
-                <td>{order.customerName}</td>
-                <td>{order.productID?.name || "N/A"}</td>
-                <td>{order.quantity}</td>
-                <td>{order.address}</td>
-                <td>
-                  <a href={`https://wa.me/${order.contact}`} className="text-green-500">
-                    {order.contact} (WhatsApp)
-                  </a>
-                </td>
-                <td>{order.cod ? "Yes" : "No"}</td>
-                <td>{order.description || "N/A"}</td>
-                <td>
-                  <input
-                    type="checkbox"
-                    className="checkbox"
-                    checked={order.delivered}
-                    onChange={(e) => handleDeliveredChange(order._id, e.target.checked)}
-                  />
-                </td>
-                <td>{order.workerID?.username || "Unknown Worker"}</td>
+        <div className="w-full">
+          <table className="table table-md w-full min-w-[600px]">
+            <thead>
+              <tr className="bg-gray-100 text-gray-800 text-xs sm:text-sm">
+                <th>#</th>
+                <th>Customer</th>
+                <th>Product</th>
+                <th>Qty</th>
+                <th>Address</th>
+                <th>Contact</th>
+                <th>COD</th>
+                <th>Description</th>
+                <th>Delivered</th>
+                <th>Worker Name</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody className="text-xs sm:text-sm">
+              {orders.map((order, index) => (
+                <tr key={index} className="border-b">
+                  <td className="px-2 py-1">{index + 1}</td>
+                  <td className="px-2 py-1 break-words whitespace-normal">
+                    {order.customerName}
+                  </td>
+                  <td className="px-2 py-1 break-words whitespace-normal">
+                    {order.productID?.name || "N/A"}
+                  </td>
+                  <td className="px-2 py-1">{order.quantity}</td>
+                  <td className="px-2 py-1 break-words whitespace-normal">
+                    {order.address}
+                  </td>
+                  <td className="px-2 py-1">
+                    <a
+                      href={`https://wa.me/${order.contact}`}
+                      className="text-green-500 break-words whitespace-normal"
+                    >
+                      {order.contact} (WhatsApp)
+                    </a>
+                  </td>
+                  <td className="px-2 py-1">{order.cod ? "Yes" : "No"}</td>
+                  <td className="px-2 py-1 break-words whitespace-normal">
+                    {order.description || "N/A"}
+                  </td>
+                  <td className="px-2 py-1">
+                    <input
+                      type="checkbox"
+                      className="checkbox"
+                      checked={order.delivered}
+                      onChange={(e) =>
+                        handleDeliveredChange(order._id, e.target.checked)
+                      }
+                    />
+                  </td>
+                  <td className="px-2 py-1 break-words whitespace-normal">
+                    {order.workerID?.username || "Unknown Worker"}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       )}
     </div>
   );
