@@ -20,6 +20,8 @@ const LoginPage = () => {
     setError("");
     setMessage("");
     const backendUrl = process.env.REACT_APP_BACKEND_URL || "http://localhost:5000";
+    console.log(backendUrl);
+    
     try {
       const response = await fetch(`${backendUrl}/admin-login`, {
         method: "POST",
