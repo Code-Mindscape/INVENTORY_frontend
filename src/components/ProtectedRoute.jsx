@@ -11,7 +11,7 @@ const ProtectedRoute = ({ children }) => {
 
     const checkAuth = async () => {
       try {
-        const res = await fetch(`${process.env.BACKEND_URL}/check-auth` || "http://localhost:5000/check-auth", {
+        const res = await fetch(`${process.env.REACT_APP_BACKEND_URL}/check-auth` || "http://localhost:5000/check-auth", {
           credentials: "include",
           signal: controller.signal,
         });

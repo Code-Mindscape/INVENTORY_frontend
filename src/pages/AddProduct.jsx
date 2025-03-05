@@ -31,7 +31,7 @@ const AddProduct = ({ onClose, onProductAdded }) => {
     }
   
     try {
-      const response = await fetch(`${process.env.BACKEND_URL}/product/addProduct` || "http://localhost:5000/product/addProduct", {
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/product/addProduct` || "http://localhost:5000/product/addProduct", {
         method: "POST",
         credentials: "include",  // ✅ Ensures cookies are sent
         headers: { "Content-Type": "application/json" },

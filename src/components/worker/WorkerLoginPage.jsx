@@ -20,7 +20,7 @@ const WorkerLoginPage = () => {
     setError("");
 
     try {
-      const response = await fetch(`${process.env.BACKEND_URL}/worker-login` || "http://localhost:5000/worker-login", {
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/worker-login` || "http://localhost:5000/worker-login", {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },

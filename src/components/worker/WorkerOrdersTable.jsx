@@ -10,7 +10,7 @@ const WorkerOrdersTable = () => {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const response = await fetch(`${process.env.BACKEND_URL}/my-orders` || "http://localhost:5000/order/my-orders", 
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/my-orders` || "http://localhost:5000/order/my-orders", 
         {credentials: "include"}
         );
         const data = await response.json();

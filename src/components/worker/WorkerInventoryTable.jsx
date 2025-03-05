@@ -7,7 +7,7 @@ const WorkerInventoryTable = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch(`${process.env.BACKEND_URL}/product/allProducts` || "http://localhost:5000/product/allProducts");
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/product/allProducts` || "http://localhost:5000/product/allProducts");
         const data = await response.json();
 
         if (Array.isArray(data.products)) {
