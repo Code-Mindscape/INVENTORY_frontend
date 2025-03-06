@@ -1,93 +1,143 @@
 import React, { useEffect, useState } from "react";
 
 const OrdersTable = () => {
-  const [products, setProducts] = useState([]);
+  const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 8; // 4 per row, 2 rows per page
 
   useEffect(() => {
-    fetchProducts();
+    const fetchOrders = async () => {
+      try {
+        const response = await fetch(
+          `https://inventorybackend-production-6c3c.up.railway.app/order/allOrders`,
+          {
+            credentials: "include",
+          }
+        );
+        const data = await response.json();
+
+        if (Array.isArray(data.orders)) {
+          setOrders(data.orders);
+        } else {
+          console.error("Unexpected API response format:", data);
+          setOrders([]);
+        }
+      } catch (error) {
+        console.error("Error fetching orders:", error);
+        setOrders([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchOrders();
   }, []);
 
-  const fetchProducts = async () => {
-    setLoading(true);
+  const handleDeliveredChange = async (orderId, isChecked) => {
     try {
       const response = await fetch(
-        "https://inventorybackend-production-6c3c.up.railway.app/product/allProducts" ||
-          "http://localhost:5000/product/allProducts",
-        { credentials: "include" }
+        `https://inventorybackend-production-6c3c.up.railway.app/order/updateOrder/${orderId}`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ delivered: isChecked }),
+          credentials: "include",
+        }
       );
-      const data = await response.json();
-      setProducts(data.products || []);
+
+      const responseText = await response.text();
+      console.log("Raw Response:", responseText);
+
+      try {
+        const responseData = JSON.parse(responseText);
+        if (!response.ok) {
+          console.error("Server Response:", responseData);
+          throw new Error(
+            `Failed to update order status: ${
+              responseData.message || "Unknown error"
+            }`
+          );
+        }
+
+        setOrders((prevOrders) =>
+          prevOrders.map((order) =>
+            order._id === orderId ? { ...order, delivered: isChecked } : order
+          )
+        );
+      } catch (jsonError) {
+        console.error("Response is not JSON. Possible authentication issue.");
+      }
     } catch (error) {
-      console.error("Error fetching products:", error);
-      setProducts([]);
-    } finally {
-      setLoading(false);
+      console.error("Error updating order status:", error);
     }
   };
 
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = products.slice(indexOfFirstItem, indexOfLastItem);
-
   return (
-    <div className="p-4">
+    <div className="overflow-auto mt-16 p-4">
       {loading ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-          {[...Array(itemsPerPage)].map((_, index) => (
-            <div key={index} className="animate-pulse bg-gray-300 h-40 rounded-lg"></div>
-          ))}
+        <div className="flex justify-center items-center py-10">
+          <span className="loading loading-spinner bg-black loading-lg"></span>
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-          {currentItems.length > 0 ? (
-            currentItems.map((product, index) => (
-              <div
-                key={index}
-                className="bg-green-300 p-4 rounded-lg shadow-md"
-              >
-                <h2 className="font-bold">Order ID: {product._id}</h2>
-                <p>Status: Delivered</p>
-                <p>Total Amount: {product.price}rs</p>
-                <hr className="my-2" />
-                <p className="font-semibold">Supplier</p>
-                <p className="font-semibold">Customer</p>
-                <p>{product.name}</p>
-                <p>{product.description || "No description"}</p>
-                <p>Size: {product.size || "N/A"}</p>
-                <p>Quantity: {product.stock}</p>
-              </div>
-            ))
-          ) : (
-            <p>No products available</p>
-          )}
+        <div className="w-full">
+          <table className="table table-md w-full min-w-[600px]">
+            <thead>
+              <tr className="bg-gray-100 text-gray-800 text-xs sm:text-sm">
+                <th>#</th>
+                <th>Customer</th>
+                <th>Product</th>
+                <th>Qty</th>
+                <th>Address</th>
+                <th>Contact</th>
+                <th>COD</th>
+                <th>Description</th>
+                <th>Delivered</th>
+                <th>Worker Name</th>
+              </tr>
+            </thead>
+            <tbody className="text-xs sm:text-sm">
+              {orders.map((order, index) => (
+                <tr key={index} className="border-b text-black">
+                  <td className="px-2 py-1">{index + 1}</td>
+                  <td className="px-2 py-1 break-words whitespace-normal">
+                    {order.customerName}
+                  </td>
+                  <td className="px-2 py-1 break-words whitespace-normal">
+                    {order.productID?.name || "N/A"}
+                  </td>
+                  <td className="px-2 py-1">{order.quantity}</td>
+                  <td className="px-2 py-1 break-words whitespace-normal">
+                    {order.address}
+                  </td>
+                  <td className="px-2 py-1">
+                    <a
+                      href={`https://wa.me/${order.contact}`}
+                      className="text-green-500 break-words whitespace-normal"
+                    >
+                      {order.contact} (WhatsApp)
+                    </a>
+                  </td>
+                  <td className="px-2 py-1">{order.cod ? "Yes" : "No"}</td>
+                  <td className="px-2 py-1 break-words whitespace-normal">
+                    {order.description || "N/A"}
+                  </td>
+                  <td className="px-2 py-1">
+                    <input
+                      type="checkbox"
+                      checked={order.delivered}
+                      onChange={(e) =>
+                        handleDeliveredChange(order._id, e.target.checked)
+                      }
+                    />
+                  </td>
+                  <td className="px-2 py-1 break-words whitespace-normal">
+                    {order.workerID?.username || "Unknown Worker"}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       )}
-
-      {/* Pagination */}
-      <div className="flex justify-center mt-4">
-        <button
-          onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-          className="px-4 py-2 bg-gray-400 text-white rounded-md mx-2"
-          disabled={currentPage === 1}
-        >
-          Previous
-        </button>
-        <span className="px-4 py-2">Page {currentPage}</span>
-        <button
-          onClick={() =>
-            setCurrentPage((prev) =>
-              indexOfLastItem < products.length ? prev + 1 : prev
-            )
-          }
-          className="px-4 py-2 bg-gray-400 text-white rounded-md mx-2"
-          disabled={indexOfLastItem >= products.length}
-        >
-          Next
-        </button>
-      </div>
     </div>
   );
 };
