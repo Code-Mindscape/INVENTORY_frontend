@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import ImageUploader from "../components/ImageUploader"; // Ensure the correct path
+import axios from "axios";
 
 const AddProduct = ({ onClose, onProductAdded }) => {
   const [formData, setFormData] = useState({
@@ -19,8 +19,27 @@ const AddProduct = ({ onClose, onProductAdded }) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleImageUpload = (imageUrl) => {
-    setFormData((prev) => ({ ...prev, imageUrl: imageUrl }));
+  // Handle Image Upload
+  const handleImageChange = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", "your_upload_preset"); // ✅ Replace with your Cloudinary upload preset
+
+    try {
+      setLoading(true);
+      const response = await axios.post(
+        `https://api.cloudinary.com/v1_1/YOUR_CLOUD_NAME/image/upload`, // ✅ Replace with your Cloudinary cloud name
+        formData
+      );
+      setFormData((prev) => ({ ...prev, imageUrl: response.data.secure_url })); // ✅ Set image URL
+    } catch (err) {
+      setError("Image upload failed!");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -29,7 +48,7 @@ const AddProduct = ({ onClose, onProductAdded }) => {
     setError("");
 
     // Validate required fields
-    if (!formData.name || !formData.price || !formData.stock || !formData.image) {
+    if (!formData.name || !formData.price || !formData.stock || !formData.imageUrl) {
       setError("⚠️ Name, Price, Stock, and Image are required.");
       setLoading(false);
       return;
@@ -71,19 +90,14 @@ const AddProduct = ({ onClose, onProductAdded }) => {
         <input type="text" name="color" value={formData.color} onChange={handleChange} placeholder="Color (Optional)" className="w-full p-2 border rounded-md" />
         <textarea name="description" value={formData.description} onChange={handleChange} placeholder="Description (Optional)" className="w-full p-2 border rounded-md"></textarea>
 
-        {/* ✅ Image Upload Component */}
-        <ImageUploader onImageUpload={handleImageUpload} />
-
-        {/* ✅ Image Preview */}
-        {formData.image && (
-          <img src={formData.image} alt="Preview" className="w-full h-40 object-cover mt-2 rounded-md shadow-md" />
-        )}
+        {/* ✅ Image Upload Input */}
+        <input type="file" accept="image/*" onChange={handleImageChange} className="w-full p-2 border rounded-md" required />
 
         <div className="flex justify-between mt-4">
           <button type="button" className="bg-gray-400 text-white px-4 py-2 rounded-md" onClick={onClose}>
             Cancel
           </button>
-          <button type="submit" className={`px-4 py-2 rounded-md text-white ${loading ? "bg-gray-500" : "bg-blue-500"}`} disabled={loading || !formData.image}>
+          <button type="submit" className={`px-4 py-2 rounded-md text-white ${loading ? "bg-gray-500" : "bg-blue-500"}`} disabled={loading || !formData.imageUrl}>
             {loading ? "Adding..." : "Add Product"}
           </button>
         </div>
