@@ -17,7 +17,7 @@ const OrdersTable = () => {
       const data = await response.json();
       
       if (data.orders && Array.isArray(data.orders)) {
-        setOrders(data.orders.slice(0, ordersPerPage)); // Ensure only 8 orders are used
+        setOrders(data.orders.slice(0, ordersPerPage));
         setTotalPages(Math.ceil(data.totalCount / ordersPerPage));
       } else {
         setOrders([]);
@@ -35,35 +35,40 @@ const OrdersTable = () => {
   }, [currentPage]);
 
   return (
-    <div className="p-4 mt-16">
+    <div className="p-6 mt-16">
       {loading ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {[...Array(8)].map((_, i) => (
-            <div key={i} className="h-64 bg-gray-200 animate-pulse rounded-lg"></div>
+            <div key={i} className="h-80 bg-gray-200 animate-pulse rounded-xl"></div>
           ))}
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
           {orders.map((order) => (
             <div
               key={order._id}
-              className="bg-green-50 border border-green-200 shadow-md rounded-xl p-4 w-full"
-              style={{ minHeight: "350px" }}
+              className="bg-white border border-gray-300 shadow-lg rounded-xl p-6 w-full"
+              style={{ minHeight: "420px" }}
             >
-              <div className="w-full h-36 bg-gray-300 rounded-lg flex items-center justify-center text-gray-500">
+              <div className="w-full h-44 bg-gray-300 rounded-lg flex items-center justify-center text-gray-500">
                 No Image
               </div>
-              <h2 className="text-lg font-bold text-green-800 mt-3">Order ID: {order._id}</h2>
-              <p className="text-gray-700 text-sm">Customer: {order.customerName}</p>
+              <h2 className="text-xl font-bold text-green-800 mt-3">Order ID: {order._id}</h2>
+              <p className="text-gray-700 text-sm font-medium">Customer: {order.customerName}</p>
               <p className="text-gray-700 text-sm">Product: {order.productID?.name || "N/A"}</p>
+              <p className="text-gray-700 text-sm">Size: {order.productID?.size || "N/A"}</p>
+              <p className="text-gray-700 text-sm">Color: {order.productID?.color || "N/A"}</p>
               <p className="text-gray-700 text-sm">Qty: {order.quantity}</p>
-              <div className="bg-white p-2 mt-2 rounded-lg border border-gray-300 text-gray-700 text-sm">
+              <p className={`text-sm font-semibold ${order.delivered ? "text-green-600" : "text-red-600"}`}>
+                Status: {order.delivered ? "Delivered" : "Pending"}
+              </p>
+              <div className="bg-gray-100 p-3 mt-2 rounded-lg border border-gray-300 text-gray-700 text-sm">
                 <strong>Address:</strong> {order.address}
               </div>
               <p className="text-gray-700 text-sm mt-2">
-                Contact: <a href={`https://wa.me/${order.contact}`} className="text-green-600">{order.contact} (WhatsApp)</a>
+                Contact: <a href={`https://wa.me/${order.contact}`} className="text-blue-600 underline">{order.contact}</a>
               </p>
-              <p className="text-gray-700 text-sm">COD: {order.cod}</p>
+              <p className="text-gray-700 text-sm">COD: {order.cod ? "Yes" : "No"}</p>
               <p className="text-gray-700 text-sm">Worker: {order.workerID?.username || "Unknown"}</p>
             </div>
           ))}
@@ -71,9 +76,9 @@ const OrdersTable = () => {
       )}
 
       {/* Pagination Controls */}
-      <div className="flex justify-center items-center mt-6 space-x-2">
+      <div className="flex justify-center items-center mt-6 space-x-3">
         <button
-          className={`px-3 py-2 text-sm font-semibold rounded-md ${
+          className={`px-4 py-2 text-sm font-semibold rounded-lg transition-all ${
             currentPage === 1 ? "bg-gray-300 cursor-not-allowed" : "bg-green-500 text-white hover:bg-green-600"
           }`}
           onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
@@ -81,11 +86,11 @@ const OrdersTable = () => {
         >
           Prev
         </button>
-        <span className="text-green-700 font-bold">
+        <span className="text-green-700 font-bold text-lg">
           Page {currentPage} of {totalPages}
         </span>
         <button
-          className={`px-3 py-2 text-sm font-semibold rounded-md ${
+          className={`px-4 py-2 text-sm font-semibold rounded-lg transition-all ${
             currentPage === totalPages ? "bg-gray-300 cursor-not-allowed" : "bg-green-500 text-white hover:bg-green-600"
           }`}
           onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
