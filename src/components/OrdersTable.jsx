@@ -41,9 +41,9 @@ const OrdersTable = () => {
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {orders.map((order, index) => (
+          {orders.map((order) => (
             <div
-              key={index}
+              key={order._id}
               className="bg-green-50 border border-green-200 shadow-md rounded-xl p-4 w-full"
               style={{ minHeight: "350px" }}
             >
