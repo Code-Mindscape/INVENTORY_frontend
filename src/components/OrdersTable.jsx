@@ -15,8 +15,10 @@ const OrdersTable = () => {
         { credentials: "include" }
       );
       const data = await response.json();
+      
       if (Array.isArray(data.orders)) {
-        setOrders(data.orders);
+        // Enforce a strict limit of 8 orders per page on the frontend
+        setOrders(data.orders.slice(0, ordersPerPage)); 
         setTotalPages(Math.ceil(data.totalCount / ordersPerPage));
       }
     } catch (error) {
