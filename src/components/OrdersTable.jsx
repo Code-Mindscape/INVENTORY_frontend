@@ -8,17 +8,18 @@ const OrdersTable = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
 
-  const fetchOrders = async (page) => {
+  // Fetch orders with search
+  const fetchOrders = async (page, query) => {
     setLoading(true);
     try {
       const response = await fetch(
-        `https://inventorybackend-production-6c3c.up.railway.app/order/allOrders?page=${page}&limit=${ordersPerPage}`,
+        `https://inventorybackend-production-6c3c.up.railway.app/order/allOrders?page=${page}&limit=${ordersPerPage}&search=${query}`,
         { credentials: "include" }
       );
       const data = await response.json();
-      
+
       if (data.orders && Array.isArray(data.orders)) {
-        setOrders(data.orders.slice(0, ordersPerPage));
+        setOrders(data.orders);
         setTotalPages(Math.ceil(data.totalCount / ordersPerPage));
       } else {
         setOrders([]);
@@ -32,15 +33,12 @@ const OrdersTable = () => {
   };
 
   useEffect(() => {
-    fetchOrders(currentPage);
-  }, [currentPage]);
+    const delaySearch = setTimeout(() => {
+      fetchOrders(currentPage, searchQuery);
+    }, 500); // Delay for efficiency (prevents too many API calls)
 
-  // Search filter logic
-  const filteredOrders = orders.filter(order => 
-    order.customerName?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    order._id.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    order.productID?.name?.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+    return () => clearTimeout(delaySearch);
+  }, [currentPage, searchQuery]);
 
   return (
     <div className="p-6 mt-16">
@@ -63,8 +61,8 @@ const OrdersTable = () => {
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-          {filteredOrders.length > 0 ? (
-            filteredOrders.map((order) => (
+          {orders.length > 0 ? (
+            orders.map((order) => (
               <div
                 key={order._id}
                 className="bg-green-200 border border-gray-300 shadow-lg rounded-xl p-6 w-full"
