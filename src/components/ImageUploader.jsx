@@ -19,6 +19,7 @@ const ImageUploader = ({ onImageUpload }) => {
     }
 
     setUploading(true);
+    const cloudName = process.env.VITE_CLOUD_NAME;
 
     const formData = new FormData();
     formData.append("file", image);
@@ -26,7 +27,7 @@ const ImageUploader = ({ onImageUpload }) => {
 
     try {
       const response = await axios.post(
-        "https://api.cloudinary.com/v1_1/your_cloud_name/image/upload", // Replace with your Cloudinary cloud name
+        cloudName, // Replace with your Cloudinary cloud name
         formData
       );
 

@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import ImageUploader from "./ImageUploader";
 
 const AddProduct = ({ onClose, onProductAdded }) => {
   const [formData, setFormData] = useState({
@@ -72,7 +71,6 @@ const AddProduct = ({ onClose, onProductAdded }) => {
         <textarea name="description" value={formData.description} onChange={handleChange} placeholder="Description (Optional)" className="w-full p-2 border rounded-md"></textarea>
 
         {/* ✅ Image Upload with Preview */}
-        <ImageUploader onImageUpload={handleImageUpload} />
         {formData.image && <img src={formData.image} alt="Preview" className="w-full h-40 object-cover mt-2 rounded-md" />}
 
         <div className="flex justify-between mt-4">
