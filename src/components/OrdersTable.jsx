@@ -55,9 +55,9 @@ const OrdersTable = () => {
               </div>
               <h2 className="text-xl font-bold text-green-800 mt-3">Order ID: {order._id}</h2>
               <p className="text-gray-700 text-sm font-medium">Customer: {order.customerName}</p>
-              <p className="text-gray-700 text-sm">Product: {order.productID?.name || "N/A"}</p>
-              <p className="text-gray-700 text-sm">Size: {order.productID?.size || "N/A"}</p>
-              <p className="text-gray-700 text-sm">Color: {order.productID?.color || "N/A"}</p>
+              <p className="text-gray-700 text-sm">Product: {order.productID?.name}</p>
+              <p className="text-gray-700 text-sm">Size: {order.productID?.size}</p>
+              <p className="text-gray-700 text-sm">Color: {order.productID?.color}</p>
               <p className="text-gray-700 text-sm">Qty: {order.quantity}</p>
               <p className={`text-sm font-semibold ${order.delivered ? "text-green-600" : "text-red-600"}`}>
                 Status: {order.delivered ? "Delivered" : "Pending"}
