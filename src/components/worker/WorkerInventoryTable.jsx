@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import AddProduct from "../pages/AddProduct";
 
 const WorkerInventoryTable = () => {
   const [products, setProducts] = useState([]);
@@ -55,16 +54,6 @@ const WorkerInventoryTable = () => {
           </div>
         </div>
       )}
-
-      {/* Add Product Button */}
-      <div className="flex justify-end mb-4">
-        <button
-          className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-semibold shadow-md"
-          onClick={() => setIsModalOpen(true)}
-        >
-          Add Product
-        </button>
-      </div>
 
       {/* Product Cards Grid */}
       {loading ? (
