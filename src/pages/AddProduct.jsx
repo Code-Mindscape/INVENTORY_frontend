@@ -9,7 +9,7 @@ const AddProduct = ({ onClose, onProductAdded }) => {
     size: "",
     color: "",
     description: "",
-    imageUrl: "",
+    imageUrl: null, // ⬅️ Changed from imageUrl to image (for file)
   });
 
   const [loading, setLoading] = useState(false);
@@ -19,27 +19,11 @@ const AddProduct = ({ onClose, onProductAdded }) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // Handle Image Upload
-  const handleImageChange = async (e) => {
+  // ✅ Handle Image Selection (Send to Backend)
+  const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (!file) return;
-
-    const formData = new FormData();
-    formData.append("file", file);
-    formData.append("upload_preset", "your_upload_preset"); // ✅ Replace with your Cloudinary upload preset
-
-    try {
-      setLoading(true);
-      const response = await axios.post(
-        `cloudinary://${process.env.VITE_CLOUD_API_KEY}:${process.env.VITE_CLOUD_API_SECRET}@dia4rgv1v`, // ✅ Replace with your Cloudinary cloud name
-        formData
-      );
-      setFormData((prev) => ({ ...prev, imageUrl: response.data.secure_url })); // ✅ Set image URL
-    } catch (err) {
-      setError("Image upload failed!");
-    } finally {
-      setLoading(false);
-    }
+    setFormData((prev) => ({ ...prev, image: file })); // Store file
   };
 
   const handleSubmit = async (e) => {
@@ -47,7 +31,6 @@ const AddProduct = ({ onClose, onProductAdded }) => {
     setLoading(true);
     setError("");
 
-    // Validate required fields
     if (!formData.name || !formData.price || !formData.stock || !formData.imageUrl) {
       setError("⚠️ Name, Price, Stock, and Image are required.");
       setLoading(false);
@@ -55,22 +38,24 @@ const AddProduct = ({ onClose, onProductAdded }) => {
     }
 
     try {
-      const response = await fetch("http://localhost:5000/product/addProduct", {
-        method: "POST",
-        credentials: "include",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
+      const productData = new FormData();
+      productData.append("name", formData.name);
+      productData.append("price", formData.price);
+      productData.append("stock", formData.stock);
+      productData.append("size", formData.size);
+      productData.append("color", formData.color);
+      productData.append("description", formData.description);
+      productData.append("imageUrl", formData.imageUrl); // Send file to backend
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Failed to add product.");
-      }
+      const response = await axios.post("http://localhost:5000/product/addProduct", productData, {
+        withCredentials: true,
+        headers: { "Content-Type": "multipart/form-data" }, // ✅ FormData header
+      });
 
       onProductAdded();
       onClose();
     } catch (err) {
-      setError(err.message);
+      setError("Failed to add product.");
     } finally {
       setLoading(false);
     }
@@ -90,14 +75,14 @@ const AddProduct = ({ onClose, onProductAdded }) => {
         <input type="text" name="color" value={formData.color} onChange={handleChange} placeholder="Color (Optional)" className="w-full p-2 border rounded-md" />
         <textarea name="description" value={formData.description} onChange={handleChange} placeholder="Description (Optional)" className="w-full p-2 border rounded-md"></textarea>
 
-        {/* ✅ Image Upload Input */}
-        <input type="file" accept="image/*" onChange={handleImageChange} className="w-full p-2 border rounded-md" required />
+        {/* ✅ File Input for Image */}
+        <input type="file" accept="image/*" name="image" onChange={handleImageChange} className="w-full p-2 border rounded-md" required />
 
         <div className="flex justify-between mt-4">
           <button type="button" className="bg-gray-400 text-white px-4 py-2 rounded-md" onClick={onClose}>
             Cancel
           </button>
-          <button type="submit" className={`px-4 py-2 rounded-md text-white ${loading ? "bg-gray-500" : "bg-blue-500"}`} disabled={loading || !formData.imageUrl}>
+          <button type="submit" className={`px-4 py-2 rounded-md text-white ${loading ? "bg-gray-500" : "bg-blue-500"}`} disabled={loading || !formData.image}>
             {loading ? "Adding..." : "Add Product"}
           </button>
         </div>
