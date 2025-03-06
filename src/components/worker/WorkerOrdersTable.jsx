@@ -10,8 +10,7 @@ const WorkerOrdersTable = () => {
     const fetchOrders = async () => {
       try {
         const response = await fetch(
-          `https://inventorybackend-production-6c3c.up.railway.app/order/my-orders` || 
-          "http://localhost:5000/order/my-orders",
+          `https://inventorybackend-production-6c3c.up.railway.app/order/my-orders`,
           { credentials: "include" }
         );
         const data = await response.json();
@@ -28,12 +27,12 @@ const WorkerOrdersTable = () => {
         setLoading(false);
       }
     };
-  
+
     fetchOrders();
   }, []);
 
   return (
-    <div className="overflow-x-auto mt-16">
+    <div className="p-6 mt-16">
       {/* Modal for Adding Orders */}
       {isModalOpen && (
         <div className="fixed inset-0 z-10 flex items-center justify-center bg-black bg-opacity-50">
@@ -57,44 +56,41 @@ const WorkerOrdersTable = () => {
       </div>
 
       {loading ? (
-        <div className="flex justify-center items-center py-10">
-          <span className="loading loading-spinner bg-black loading-lg"></span>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          {[...Array(8)].map((_, i) => (
+            <div key={i} className="h-80 bg-gray-200 animate-pulse rounded-xl"></div>
+          ))}
         </div>
       ) : (
-        <table className="table table-md w-full">
-          <thead>
-            <tr className="text-black">
-              <th>#</th>
-              <th>Customer</th>
-              <th>Product Name</th>
-              <th>Quantity</th>
-              <th>Address</th>
-              <th>Contact</th>
-              <th>COD</th>
-              <th>Description</th>
-              <th>Delivered</th>
-            </tr>
-          </thead>
-          <tbody>
-            {orders.map((order, index) => (
-              <tr key={index} className="text-black">
-                <th>{index + 1}</th>
-                <td>{order.customerName}</td>
-                <td>{order.productID.name}</td>
-                <td>{order.quantity}</td>
-                <td>{order.address}</td>
-                <td>
-                  <a href={`https://wa.me/${order.contact}`} className="text-black">
-                    {order.contact} <span className="text-green-500">WhatsApp</span>
-                  </a>
-                </td>
-                <td>{order.cod}</td>
-                <td>{order.description}</td>
-                <td>{order.delivered ? "✔" : "❌"}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+          {orders.map((order) => (
+            <div
+              key={order._id}
+              className="bg-green-200 border border-gray-300 shadow-lg rounded-xl p-6 w-full"
+              style={{ minHeight: "420px" }}
+            >
+              <div className="w-full h-44 bg-gray-300 rounded-lg flex items-center justify-center text-gray-500">
+                No Image
+              </div>
+              <h2 className="text-xl font-bold text-green-800 mt-3">Order ID: {order._id}</h2>
+              <p className="text-gray-700 text-sm font-medium">Customer: {order.customerName}</p>
+              <p className="text-gray-700 text-sm">Product: {order.productID?.name}</p>
+              <p className="text-gray-700 text-sm">Size: {order.productID?.size}</p>
+              <p className="text-gray-700 text-sm">Color: {order.productID?.color}</p>
+              <p className="text-gray-700 text-sm">Qty: {order.quantity}</p>
+              <p className={`text-sm font-semibold ${order.delivered ? "text-green-600" : "text-red-600"}`}>
+                Status: {order.delivered ? "Delivered" : "Pending"}
+              </p>
+              <div className="bg-gray-100 p-3 mt-2 rounded-lg border border-gray-300 text-gray-700 text-sm">
+                <strong>Address:</strong> {order.address}
+              </div>
+              <p className="text-gray-700 text-sm mt-2">
+                Contact: <a href={`https://wa.me/${order.contact}`} className="text-blue-600 underline">{order.contact}</a>
+              </p>
+              <p className="text-gray-700 text-sm">COD: {order.cod}</p>
+            </div>
+          ))}
+        </div>
       )}
     </div>
   );
