@@ -2,35 +2,34 @@ import React, { useEffect, useState } from "react";
 
 const OrdersTable = () => {
   const [orders, setOrders] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const ordersPerPage = 8;
+  const [totalPages, setTotalPages] = useState(1);
+
+  const fetchOrders = async (page) => {
+    setLoading(true);
+    try {
+      const response = await fetch(
+        `https://inventorybackend-production-6c3c.up.railway.app/order/allOrders?page=${page}&limit=${ordersPerPage}`,
+        { credentials: "include" }
+      );
+      const data = await response.json();
+      if (Array.isArray(data.orders)) {
+        setOrders(data.orders);
+        setTotalPages(Math.ceil(data.totalCount / ordersPerPage));
+      }
+    } catch (error) {
+      console.error("Error fetching orders:", error);
+      setOrders([]);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchOrders = async () => {
-      try {
-        const response = await fetch(
-          `https://inventorybackend-production-6c3c.up.railway.app/order/allOrders`,
-          { credentials: "include" }
-        );
-        const data = await response.json();
-        setOrders(Array.isArray(data.orders) ? data.orders : []);
-      } catch (error) {
-        console.error("Error fetching orders:", error);
-        setOrders([]);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchOrders();
-  }, []);
-
-  // Pagination logic
-  const indexOfLastOrder = currentPage * ordersPerPage;
-  const indexOfFirstOrder = indexOfLastOrder - ordersPerPage;
-  const currentOrders = orders.slice(indexOfFirstOrder, indexOfLastOrder);
-  const totalPages = Math.ceil(orders.length / ordersPerPage);
+    fetchOrders(currentPage);
+  }, [currentPage]);
 
   return (
     <div className="p-4">
@@ -42,34 +41,24 @@ const OrdersTable = () => {
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {currentOrders.map((order, index) => (
+          {orders.map((order, index) => (
             <div
               key={index}
               className="bg-green-50 border border-green-200 shadow-md rounded-xl p-4 w-full"
               style={{ minHeight: "350px" }}
             >
-              {/* Image Box Placeholder */}
               <div className="w-full h-36 bg-gray-300 rounded-lg flex items-center justify-center text-gray-500">
                 No Image
               </div>
-
-              <h2 className="text-lg font-bold text-green-800 mt-3">
-                Order ID: {order._id}
-              </h2>
+              <h2 className="text-lg font-bold text-green-800 mt-3">Order ID: {order._id}</h2>
               <p className="text-gray-700 text-sm">Customer: {order.customerName}</p>
               <p className="text-gray-700 text-sm">Product: {order.productID?.name || "N/A"}</p>
               <p className="text-gray-700 text-sm">Qty: {order.quantity}</p>
-
-              {/* Larger Address Box */}
               <div className="bg-white p-2 mt-2 rounded-lg border border-gray-300 text-gray-700 text-sm">
                 <strong>Address:</strong> {order.address}
               </div>
-
               <p className="text-gray-700 text-sm mt-2">
-                Contact:{" "}
-                <a href={`https://wa.me/${order.contact}`} className="text-green-600">
-                  {order.contact} (WhatsApp)
-                </a>
+                Contact: <a href={`https://wa.me/${order.contact}`} className="text-green-600">{order.contact} (WhatsApp)</a>
               </p>
               <p className="text-gray-700 text-sm">COD: {order.cod ? "Yes" : "No"}</p>
               <p className="text-gray-700 text-sm">Worker: {order.workerID?.username || "Unknown"}</p>
