@@ -8,12 +8,13 @@ const WorkerOrdersTable = () => {
   const ordersPerPage = 8;
   const [totalPages, setTotalPages] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
 
-  const fetchOrders = async (page) => {
+  const fetchOrders = async (page, query = "") => {
     setLoading(true);
     try {
       const response = await fetch(
-        `https://inventorybackend-production-6c3c.up.railway.app/order/my-orders?page=${page}&limit=${ordersPerPage}`,
+        `https://inventorybackend-production-6c3c.up.railway.app/order/my-orders?page=${page}&limit=${ordersPerPage}&search=${query}`,
         { credentials: "include" }
       );
       const data = await response.json();
@@ -33,12 +34,11 @@ const WorkerOrdersTable = () => {
   };
 
   useEffect(() => {
-    fetchOrders(currentPage);
-  }, [currentPage]);
+    fetchOrders(currentPage, searchQuery);
+  }, [currentPage, searchQuery]);
 
   return (
     <div className="p-6 mt-16">
-      {/* Modal for Adding Orders */}
       {isModalOpen && (
         <div className="fixed inset-0 z-10 flex items-center justify-center bg-black bg-opacity-50">
           <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
@@ -50,8 +50,14 @@ const WorkerOrdersTable = () => {
         </div>
       )}
 
-      {/* Add Order Button */}
-      <div className="flex justify-end mb-4">
+      <div className="flex justify-between mb-4">
+        <input
+          type="text"
+          placeholder="Search orders..."
+          className="border border-gray-300 rounded-lg p-2 w-full max-w-md"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+        />
         <button
           className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-semibold shadow-md"
           onClick={() => setIsModalOpen(true)}
@@ -99,7 +105,6 @@ const WorkerOrdersTable = () => {
         </div>
       )}
 
-      {/* Pagination Controls */}
       <div className="flex justify-center items-center mt-6 space-x-3">
         <button
           className={`px-4 py-2 text-sm font-semibold rounded-lg transition-all ${

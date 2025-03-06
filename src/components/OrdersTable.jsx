@@ -47,7 +47,7 @@ const OrdersTable = () => {
         <input
           type="text"
           placeholder="Search orders..."
-          className="border border-gray-300 rounded-lg p-2 w-full max-w-md"
+          className="border border-black text-black p-1 rounded-md w-[200px] max-w-sm"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
         />
