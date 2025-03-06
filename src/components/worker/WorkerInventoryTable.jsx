@@ -52,7 +52,7 @@ const WorkerInventoryTable = () => {
         <input
           type="text"
           placeholder="Search products..."
-          className="border p-2 rounded-md w-full max-w-sm"
+          className="border p-1 rounded-md w-[150px] max-w-sm"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
