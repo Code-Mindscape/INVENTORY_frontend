@@ -79,7 +79,7 @@ const InventoryTable = () => {
             products.map((product) => (
               <div
                 key={product._id}
-                className="bg-white border border-gray-300 shadow-lg rounded-xl p-6 w-full transform transition duration-300 hover:scale-105 relative"
+                className="bg-white border border-gray-300 shadow-lg rounded-xl p-6 w-full transform transition duration-300 relative"
                 style={{ minHeight: "450px" }}
               >
                 {/* Image Box */}
@@ -96,7 +96,7 @@ const InventoryTable = () => {
 
                 {/* Copyable Product ID */}
                 <div
-                  className="relative cursor-pointer text-gray-700 text-sm font-medium bg-gray-100 p-2 rounded-lg inline-block border border-gray-300 hover:bg-gray-200 transition"
+                  className="relative cursor-pointer text-gray-700 text-sm font-medium bg-gray-100 p-2 rounded-lg inline-block"
                   onClick={() => copyToClipboard(product._id)}
                 >
                   Product ID: {product._id}
