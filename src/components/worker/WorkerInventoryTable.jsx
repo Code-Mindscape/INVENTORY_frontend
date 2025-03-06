@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import AddProduct from "../pages/AddProduct";
 
 const WorkerInventoryTable = () => {
   const [products, setProducts] = useState([]);
