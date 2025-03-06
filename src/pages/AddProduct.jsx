@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import ImageUploader from "../components/ImageUploader";
+import ImageUploader from "../components/ImageUploader"; // Ensure the correct path
 
 const AddProduct = ({ onClose, onProductAdded }) => {
   const [formData, setFormData] = useState({
@@ -9,7 +9,7 @@ const AddProduct = ({ onClose, onProductAdded }) => {
     size: "",
     color: "",
     description: "",
-    image: "",
+    imageUrl: "",
   });
 
   const [loading, setLoading] = useState(false);
@@ -20,7 +20,7 @@ const AddProduct = ({ onClose, onProductAdded }) => {
   };
 
   const handleImageUpload = (imageUrl) => {
-    setFormData((prev) => ({ ...prev, image: imageUrl }));
+    setFormData((prev) => ({ ...prev, imageUrl: imageUrl }));
   };
 
   const handleSubmit = async (e) => {
@@ -71,9 +71,13 @@ const AddProduct = ({ onClose, onProductAdded }) => {
         <input type="text" name="color" value={formData.color} onChange={handleChange} placeholder="Color (Optional)" className="w-full p-2 border rounded-md" />
         <textarea name="description" value={formData.description} onChange={handleChange} placeholder="Description (Optional)" className="w-full p-2 border rounded-md"></textarea>
 
-        {/* ✅ Image Upload with Preview */}
+        {/* ✅ Image Upload Component */}
         <ImageUploader onImageUpload={handleImageUpload} />
-        {formData.image && <img src={formData.image} alt="Preview" className="w-full h-40 object-cover mt-2 rounded-md" />}
+
+        {/* ✅ Image Preview */}
+        {formData.image && (
+          <img src={formData.image} alt="Preview" className="w-full h-40 object-cover mt-2 rounded-md shadow-md" />
+        )}
 
         <div className="flex justify-between mt-4">
           <button type="button" className="bg-gray-400 text-white px-4 py-2 rounded-md" onClick={onClose}>
