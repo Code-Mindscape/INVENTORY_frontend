@@ -69,12 +69,12 @@ const AddProduct = ({ onClose, onProductAdded }) => {
       {error && <p className="text-red-500 text-sm mb-2">{error}</p>}
 
       <form onSubmit={handleSubmit} className="space-y-4">
-        <input type="text" name="name" value={formData.name} onChange={handleChange} placeholder="Product Name *" className="w-full p-2 border rounded-md" required />
-        <input type="number" name="price" value={formData.price} onChange={handleChange} placeholder="Price *" className="w-full p-2 border rounded-md" required />
-        <input type="number" name="stock" value={formData.stock} onChange={handleChange} placeholder="Stock *" className="w-full p-2 border rounded-md" required />
-        <input type="text" name="size" value={formData.size} onChange={handleChange} placeholder="Size (Optional)" className="w-full p-2 border rounded-md" />
-        <input type="text" name="color" value={formData.color} onChange={handleChange} placeholder="Color (Optional)" className="w-full p-2 border rounded-md" />
-        <textarea name="description" value={formData.description} onChange={handleChange} placeholder="Description (Optional)" className="w-full p-2 border rounded-md"></textarea>
+        <input type="text" name="name" value={formData.name} onChange={handleChange} placeholder="Product Name *" className="border-black text-black w-full p-2 border rounded-md" required />
+        <input type="number" name="price" value={formData.price} onChange={handleChange} placeholder="Price *" className="border-black text-black w-full p-2 border rounded-md" required />
+        <input type="number" name="stock" value={formData.stock} onChange={handleChange} placeholder="Stock *" className="border-black text-black w-full p-2 border rounded-md" required />
+        <input type="text" name="size" value={formData.size} onChange={handleChange} placeholder="Size (Optional)" className="border-black text-black w-full p-2 border rounded-md" />
+        <input type="text" name="color" value={formData.color} onChange={handleChange} placeholder="Color (Optional)" className="border-black text-black w-full p-2 border rounded-md" />
+        <textarea name="description" value={formData.description} onChange={handleChange} placeholder="Description (Optional)" className="border-black text-black w-full p-2 border rounded-md"></textarea>
 
         {/* ✅ File Input for Image */}
         <input type="file" accept="image/*" name="image" onChange={handleImageChange} className="w-full p-2 border rounded-md" required />
