@@ -34,7 +34,6 @@ const InventoryTable = () => {
       setLoading(false);
     }
   };
-
   useEffect(() => {
     fetchProducts(currentPage, searchTerm);
   }, [currentPage, searchTerm]);
