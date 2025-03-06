@@ -53,12 +53,12 @@ const WorkerInventoryTable = () => {
         <input
           type="text"
           placeholder="Search products..."
-          className="border p-2 rounded-md w-full max-w-md"
+          className="border p-2 rounded-md w-full max-w-sm"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
       </div>
-      
+
       {/* Product Cards Grid */}
       {loading ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
