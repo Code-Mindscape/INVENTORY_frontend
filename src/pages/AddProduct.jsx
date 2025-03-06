@@ -64,7 +64,7 @@ const AddProduct = ({ onClose, onProductAdded }) => {
 
   return (
     <div className="p-6 bg-white rounded-lg shadow-lg w-full max-w-md">
-      <h2 className="text-lg font-semibold mb-4">🛒 Add New Product</h2>
+      <h2 className="text-lg text-black font-semibold mb-4">🛒 Add New Product</h2>
 
       {error && <p className="text-red-500 text-sm mb-2">{error}</p>}
 
@@ -77,7 +77,7 @@ const AddProduct = ({ onClose, onProductAdded }) => {
         <textarea name="description" value={formData.description} onChange={handleChange} placeholder="Description (Optional)" className="border-black text-black w-full p-2 border rounded-md"></textarea>
 
         {/* ✅ File Input for Image */}
-        <input type="file" accept="image/*" name="image" onChange={handleImageChange} className="w-full p-2 border rounded-md" required />
+        <input type="file" accept="image/*" name="image" onChange={handleImageChange} className="w-full p-2 border border-black text-black rounded-md" required />
 
         <div className="flex justify-between mt-4">
           <button type="button" className="bg-gray-400 text-white px-4 py-2 rounded-md" onClick={onClose}>
