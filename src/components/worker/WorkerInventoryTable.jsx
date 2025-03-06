@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import AddProduct from "../pages/AddProduct";
 
 const WorkerInventoryTable = () => {
   const [products, setProducts] = useState([]);
@@ -8,13 +9,14 @@ const WorkerInventoryTable = () => {
   const productsPerPage = 8;
   const [totalPages, setTotalPages] = useState(1);
   const [copiedId, setCopiedId] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
 
   // Fetch products from the backend
-  const fetchProducts = async (page) => {
+  const fetchProducts = async (page, search = "") => {
     setLoading(true);
     try {
       const response = await fetch(
-        `https://inventorybackend-production-6c3c.up.railway.app/product/allProducts?page=${page}&limit=${productsPerPage}`,
+        `https://inventorybackend-production-6c3c.up.railway.app/product/allProducts?page=${page}&limit=${productsPerPage}&search=${search}`,
         { credentials: "include" }
       );
       const data = await response.json();
@@ -34,8 +36,8 @@ const WorkerInventoryTable = () => {
   };
 
   useEffect(() => {
-    fetchProducts(currentPage);
-  }, [currentPage]);
+    fetchProducts(currentPage, searchTerm);
+  }, [currentPage, searchTerm]);
 
   // Copy Product ID to clipboard
   const copyToClipboard = (id) => {
