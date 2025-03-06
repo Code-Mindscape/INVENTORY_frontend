@@ -3,18 +3,17 @@ import React, { useEffect, useState } from "react";
 const OrdersTable = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const ordersPerPage = 8;
 
   useEffect(() => {
     const fetchOrders = async () => {
       try {
         const response = await fetch(
           `https://inventorybackend-production-6c3c.up.railway.app/order/allOrders`,
-          {
-            credentials: "include",
-          }
+          { credentials: "include" }
         );
         const data = await response.json();
-
         if (Array.isArray(data.orders)) {
           setOrders(data.orders);
         } else {
@@ -28,116 +27,52 @@ const OrdersTable = () => {
         setLoading(false);
       }
     };
-
     fetchOrders();
   }, []);
 
-  const handleDeliveredChange = async (orderId, isChecked) => {
-    try {
-      const response = await fetch(
-        `https://inventorybackend-production-6c3c.up.railway.app/order/updateOrder/${orderId}`,
-        {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ delivered: isChecked }),
-          credentials: "include",
-        }
-      );
-
-      const responseText = await response.text();
-      console.log("Raw Response:", responseText);
-
-      try {
-        const responseData = JSON.parse(responseText);
-        if (!response.ok) {
-          console.error("Server Response:", responseData);
-          throw new Error(
-            `Failed to update order status: ${
-              responseData.message || "Unknown error"
-            }`
-          );
-        }
-
-        setOrders((prevOrders) =>
-          prevOrders.map((order) =>
-            order._id === orderId ? { ...order, delivered: isChecked } : order
-          )
-        );
-      } catch (jsonError) {
-        console.error("Response is not JSON. Possible authentication issue.");
-      }
-    } catch (error) {
-      console.error("Error updating order status:", error);
-    }
-  };
+  // Pagination Logic
+  const indexOfLastOrder = currentPage * ordersPerPage;
+  const indexOfFirstOrder = indexOfLastOrder - ordersPerPage;
+  const currentOrders = orders.slice(indexOfFirstOrder, indexOfLastOrder);
 
   return (
-    <div className="overflow-auto mt-16 p-4">
+    <div className="p-4">
       {loading ? (
-        <div className="flex justify-center items-center py-10">
-          <span className="loading loading-spinner bg-black loading-lg"></span>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+          {[...Array(8)].map((_, index) => (
+            <div
+              key={index}
+              className="animate-pulse bg-gray-200 h-44 rounded-md"
+            ></div>
+          ))}
         </div>
       ) : (
-        <div className="w-full">
-          <table className="table table-md w-full min-w-[600px]">
-            <thead>
-              <tr className="bg-gray-100 text-gray-800 text-xs sm:text-sm">
-                <th>#</th>
-                <th>Customer</th>
-                <th>Product</th>
-                <th>Qty</th>
-                <th>Address</th>
-                <th>Contact</th>
-                <th>COD</th>
-                <th>Description</th>
-                <th>Delivered</th>
-                <th>Worker Name</th>
-              </tr>
-            </thead>
-            <tbody className="text-xs sm:text-sm">
-              {orders.map((order, index) => (
-                <tr key={index} className="border-b text-black">
-                  <td className="px-2 py-1">{index + 1}</td>
-                  <td className="px-2 py-1 break-words whitespace-normal">
-                    {order.customerName}
-                  </td>
-                  <td className="px-2 py-1 break-words whitespace-normal">
-                    {order.productID?.name || "N/A"}
-                  </td>
-                  <td className="px-2 py-1">{order.quantity}</td>
-                  <td className="px-2 py-1 break-words whitespace-normal">
-                    {order.address}
-                  </td>
-                  <td className="px-2 py-1">
-                    <a
-                      href={`https://wa.me/${order.contact}`}
-                      className="text-green-500 break-words whitespace-normal"
-                    >
-                      {order.contact} (WhatsApp)
-                    </a>
-                  </td>
-                  <td className="px-2 py-1">{order.cod ? "Yes" : "No"}</td>
-                  <td className="px-2 py-1 break-words whitespace-normal">
-                    {order.description || "N/A"}
-                  </td>
-                  <td className="px-2 py-1">
-                    <input
-                      type="checkbox"
-                      checked={order.delivered}
-                      onChange={(e) =>
-                        handleDeliveredChange(order._id, e.target.checked)
-                      }
-                    />
-                  </td>
-                  <td className="px-2 py-1 break-words whitespace-normal">
-                    {order.workerID?.username || "Unknown Worker"}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+          {currentOrders.map((order, index) => (
+            <div key={index} className="bg-green-300 p-4 rounded-lg shadow-md">
+              <p className="font-bold">Order ID: {order._id}</p>
+              <p className="text-sm">Customer: {order.customerName}</p>
+              <p className="text-sm">Product: {order.productID?.name || "N/A"}</p>
+              <p className="text-sm">Qty: {order.quantity}</p>
+              <p className="text-sm">Contact: {order.contact}</p>
+              <p className="text-sm">COD: {order.cod ? "Yes" : "No"}</p>
+              <p className="text-sm">Status: {order.delivered ? "Delivered" : "Pending"}</p>
+            </div>
+          ))}
         </div>
       )}
+      {/* Pagination */}
+      <div className="flex justify-center mt-4">
+        {Array.from({ length: Math.ceil(orders.length / ordersPerPage) }).map((_, i) => (
+          <button
+            key={i}
+            onClick={() => setCurrentPage(i + 1)}
+            className={`px-3 py-1 mx-1 border rounded ${currentPage === i + 1 ? "bg-blue-500 text-white" : "bg-gray-200"}`}
+          >
+            {i + 1}
+          </button>
+        ))}
+      </div>
     </div>
   );
 };
