@@ -6,6 +6,7 @@ const OrdersTable = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const ordersPerPage = 8;
   const [totalPages, setTotalPages] = useState(1);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const fetchOrders = async (page) => {
     setLoading(true);
@@ -34,8 +35,26 @@ const OrdersTable = () => {
     fetchOrders(currentPage);
   }, [currentPage]);
 
+  // Search filter logic
+  const filteredOrders = orders.filter(order => 
+    order.customerName?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    order._id.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    order.productID?.name?.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   return (
     <div className="p-6 mt-16">
+      {/* Search Bar */}
+      <div className="mb-4 flex justify-end">
+        <input
+          type="text"
+          placeholder="Search orders..."
+          className="border border-gray-300 rounded-lg p-2 w-full max-w-md"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+        />
+      </div>
+
       {loading ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {[...Array(8)].map((_, i) => (
@@ -44,34 +63,38 @@ const OrdersTable = () => {
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-          {orders.map((order) => (
-            <div
-              key={order._id}
-              className="bg-green-200 border border-gray-300 shadow-lg rounded-xl p-6 w-full"
-              style={{ minHeight: "420px" }}
-            >
-              <div className="w-full h-44 bg-gray-300 rounded-lg flex items-center justify-center text-gray-500">
-                No Image
+          {filteredOrders.length > 0 ? (
+            filteredOrders.map((order) => (
+              <div
+                key={order._id}
+                className="bg-green-200 border border-gray-300 shadow-lg rounded-xl p-6 w-full"
+                style={{ minHeight: "420px" }}
+              >
+                <div className="w-full h-44 bg-gray-300 rounded-lg flex items-center justify-center text-gray-500">
+                  No Image
+                </div>
+                <h2 className="text-xl font-bold text-green-800 mt-3">Order ID: {order._id}</h2>
+                <p className="text-gray-700 text-sm font-medium">Customer: {order.customerName}</p>
+                <p className="text-gray-700 text-sm">Product: {order.productID?.name}</p>
+                <p className="text-gray-700 text-sm">Size: {order.productID?.size}</p>
+                <p className="text-gray-700 text-sm">Color: {order.productID?.color}</p>
+                <p className="text-gray-700 text-sm">Qty: {order.quantity}</p>
+                <p className={`text-sm font-semibold ${order.delivered ? "text-green-600" : "text-red-600"}`}>
+                  Status: {order.delivered ? "Delivered" : "Pending"}
+                </p>
+                <div className="bg-gray-100 p-3 mt-2 rounded-lg border border-gray-300 text-gray-700 text-sm break-words max-h-32 overflow-auto">
+                  <strong>Address:</strong> {order.address}
+                </div>
+                <p className="text-gray-700 text-sm mt-2">
+                  Contact: <a href={`https://wa.me/${order.contact}`} className="text-blue-600 underline">{order.contact}</a>
+                </p>
+                <p className="text-gray-700 text-sm">COD: {order.cod}</p>
+                <p className="text-gray-700 text-sm">Worker: {order.workerID?.username || "Unknown"}</p>
               </div>
-              <h2 className="text-xl font-bold text-green-800 mt-3">Order ID: {order._id}</h2>
-              <p className="text-gray-700 text-sm font-medium">Customer: {order.customerName}</p>
-              <p className="text-gray-700 text-sm">Product: {order.productID?.name}</p>
-              <p className="text-gray-700 text-sm">Size: {order.productID?.size}</p>
-              <p className="text-gray-700 text-sm">Color: {order.productID?.color}</p>
-              <p className="text-gray-700 text-sm">Qty: {order.quantity}</p>
-              <p className={`text-sm font-semibold ${order.delivered ? "text-green-600" : "text-red-600"}`}>
-                Status: {order.delivered ? "Delivered" : "Pending"}
-              </p>
-              <div className="bg-gray-100 p-3 mt-2 rounded-lg border border-gray-300 text-gray-700 text-sm break-words max-h-32 overflow-auto">
-                <strong>Address:</strong> {order.address}
-              </div>
-              <p className="text-gray-700 text-sm mt-2">
-                Contact: <a href={`https://wa.me/${order.contact}`} className="text-blue-600 underline">{order.contact}</a>
-              </p>
-              <p className="text-gray-700 text-sm">COD: {order.cod}</p>
-              <p className="text-gray-700 text-sm">Worker: {order.workerID?.username || "Unknown"}</p>
-            </div>
-          ))}
+            ))
+          ) : (
+            <p className="text-center text-gray-500 col-span-full">No orders found.</p>
+          )}
         </div>
       )}
 
