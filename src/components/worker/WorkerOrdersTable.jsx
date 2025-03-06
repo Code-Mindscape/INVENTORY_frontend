@@ -10,7 +10,8 @@ const WorkerOrdersTable = () => {
     const fetchOrders = async () => {
       try {
         const response = await fetch(
-          `https://inventorybackend-production-6c3c.up.railway.app/order/my-orders`,
+          `https://inventorybackend-production-6c3c.up.railway.app/order/my-orders` || 
+          "http://localhost:5000/order/my-orders",
           { credentials: "include" }
         );
         const data = await response.json();
@@ -75,13 +76,11 @@ const WorkerOrdersTable = () => {
               <h2 className="text-xl font-bold text-green-800 mt-3">Order ID: {order._id}</h2>
               <p className="text-gray-700 text-sm font-medium">Customer: {order.customerName}</p>
               <p className="text-gray-700 text-sm">Product: {order.productID?.name}</p>
-              <p className="text-gray-700 text-sm">Size: {order.productID?.size}</p>
-              <p className="text-gray-700 text-sm">Color: {order.productID?.color}</p>
               <p className="text-gray-700 text-sm">Qty: {order.quantity}</p>
               <p className={`text-sm font-semibold ${order.delivered ? "text-green-600" : "text-red-600"}`}>
                 Status: {order.delivered ? "Delivered" : "Pending"}
               </p>
-              <div className="bg-gray-100 p-3 mt-2 rounded-lg border border-gray-300 text-gray-700 text-sm">
+              <div className="bg-gray-100 p-3 mt-2 rounded-lg border border-gray-300 text-gray-700 text-sm break-words overflow-hidden max-h-32 overflow-y-auto">
                 <strong>Address:</strong> {order.address}
               </div>
               <p className="text-gray-700 text-sm mt-2">
