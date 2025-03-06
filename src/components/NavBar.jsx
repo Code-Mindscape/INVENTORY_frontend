@@ -41,7 +41,7 @@ function NavBar() {
   }, []);
 
   return (
-    <nav className="bg-gray-800 w-full fixed z-10">
+    <nav className="bg-green-900 w-full fixed z-10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
@@ -49,7 +49,7 @@ function NavBar() {
             {username ? (
               <span className="text-white text-md font-medium">{username}</span>
             ) : (
-              <span className="text-gray-400 text-sm">Not logged in</span>
+              <span className="text-green-400 text-sm">Not logged in</span>
             )}
           </h1>
 
@@ -57,7 +57,7 @@ function NavBar() {
           <div className="md:hidden">
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="text-gray-300 hover:text-white focus:outline-none"
+              className="text-green-300 hover:text-white focus:outline-none"
             >
               {isMenuOpen ? <X size={28} /> : <Menu size={28} />}
             </button>
@@ -69,7 +69,7 @@ function NavBar() {
               <a
                 key={href}
                 href={href}
-                className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+                className="text-green-300 hover:bg-green-800 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
               >
                 {name}
               </a>
@@ -86,7 +86,7 @@ function NavBar() {
               <a
                 key={href}
                 href={href}
-                className="block text-gray-300 hover:bg-green-800 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+                className="block text-green-300 hover:bg-green-800 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
                 onClick={() => setIsMenuOpen(false)}
               >
                 {name}
