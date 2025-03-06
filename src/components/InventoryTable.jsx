@@ -9,8 +9,8 @@ const InventoryTable = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const productsPerPage = 8;
   const [totalPages, setTotalPages] = useState(1);
-  const [copiedId, setCopiedId] = useState(null);
 
+  // Fetch products from the backend
   const fetchProducts = async (page, query = "") => {
     setLoading(true);
     try {
@@ -19,7 +19,7 @@ const InventoryTable = () => {
         { credentials: "include" }
       );
       const data = await response.json();
-
+      
       if (data.products) {
         setProducts(data.products);
         setTotalPages(Math.ceil(data.totalCount / productsPerPage));
@@ -38,79 +38,62 @@ const InventoryTable = () => {
     fetchProducts(currentPage, searchQuery);
   }, [currentPage, searchQuery]);
 
-  const handleSearch = (event) => {
-    setSearchQuery(event.target.value);
-    setCurrentPage(1);
-  };
-
   return (
     <div className="p-6 mt-16">
-      {isModalOpen && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md relative z-50">
-            <AddProduct onClose={() => setIsModalOpen(false)} onProductAdded={() => fetchProducts(currentPage)} />
-          </div>
-        </div>
-      )}
-
-      <div className="flex justify-between mb-4">
+      {/* Search Input */}
+      <div className="mb-4">
         <input
           type="text"
           placeholder="Search products..."
           value={searchQuery}
-          onChange={handleSearch}
-          className="border p-2 rounded-md w-1/3"
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="px-4 py-2 border rounded-lg w-full"
         />
+      </div>
+
+      {/* Add Product Button */}
+      <div className="flex justify-end mb-4">
         <button
-          className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-semibold shadow-md"
+          className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md"
           onClick={() => setIsModalOpen(true)}
         >
           Add Product
         </button>
       </div>
 
+      {/* Product Cards */}
       {loading ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {[...Array(8)].map((_, i) => (
-            <div key={i} className="h-80 bg-gray-200 animate-pulse rounded-xl"></div>
-          ))}
-        </div>
+        <div>Loading...</div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {products.length > 0 ? (
             products.map((product) => (
-              <div key={product._id} className="bg-white border border-gray-300 shadow-lg rounded-xl p-6 w-full relative">
-                <div className="w-full h-44 bg-gray-300 rounded-lg flex items-center justify-center text-gray-500">
-                  {product.imageUrl ? (
-                    <img src={product.imageUrl} alt={product.name} className="h-full w-full object-cover rounded-lg" />
-                  ) : (
-                    "No Image"
-                  )}
-                </div>
-                <h2 className="text-lg font-bold text-blue-800 mt-3">{product.name}</h2>
+              <div key={product._id} className="border p-4 rounded-lg shadow">
+                <h2 className="font-bold">{product.name}</h2>
+                <p>Price: ${product.price}</p>
+                <p>Stock: {product.stock}</p>
               </div>
             ))
           ) : (
-            <p className="text-center text-gray-500 col-span-4">No products available</p>
+            <p>No products found</p>
           )}
         </div>
       )}
 
-      <div className="flex justify-center items-center mt-6 space-x-3">
+      {/* Pagination Controls */}
+      <div className="flex justify-center mt-6">
         <button
-          className={`px-4 py-2 text-sm font-semibold rounded-lg transition-all ${currentPage === 1 ? "bg-gray-300 cursor-not-allowed" : "bg-blue-500 text-white hover:bg-blue-600"}`}
           onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
           disabled={currentPage === 1}
+          className="px-4 py-2 border rounded"
         >
           Prev
         </button>
-        <span className="text-blue-700 font-bold text-lg">
-          Page {currentPage} of {totalPages}
-        </span>
+        <span className="mx-4">Page {currentPage} of {totalPages}</span>
         <button
-          className={`px-4 py-2 text-sm font-semibold rounded-lg transition-all ${currentPage === totalPages ? "bg-gray-300 cursor-not-allowed" : "bg-blue-500 text-white hover:bg-blue-600"}`}
           onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
           disabled={currentPage === totalPages}
+          className="px-4 py-2 border rounded"
         >
           Next
         </button>
