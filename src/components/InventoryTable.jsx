@@ -101,7 +101,7 @@ const InventoryTable = () => {
                 >
                   Product ID: {product._id}
                   {copiedId === product._id && (
-                    <span className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-black text-white text-xs px-2 py-1 rounded">
+                    <span className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-black text-white text-sm px-2 py-1 rounded">
                       Copied!
                     </span>
                   )}
