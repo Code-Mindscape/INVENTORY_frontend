@@ -47,7 +47,7 @@ const OrdersTable = () => {
           {orders.map((order) => (
             <div
               key={order._id}
-              className="bg-white border border-gray-300 shadow-lg rounded-xl p-6 w-full"
+              className="bg-green-200 border border-gray-300 shadow-lg rounded-xl p-6 w-full"
               style={{ minHeight: "420px" }}
             >
               <div className="w-full h-44 bg-gray-300 rounded-lg flex items-center justify-center text-gray-500">
