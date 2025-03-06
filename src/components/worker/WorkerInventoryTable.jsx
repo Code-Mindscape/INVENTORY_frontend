@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 const WorkerInventoryTable = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const productsPerPage = 8;
   const [totalPages, setTotalPages] = useState(1);
@@ -50,13 +49,7 @@ const WorkerInventoryTable = () => {
 
       {/* Search Input */}
       <div className="flex justify-between mb-4">
-        <input
-          type="text"
-          placeholder="Search products..."
-          className="border p-2 rounded-md w-full max-w-sm"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
+
       </div>
 
       {/* Product Cards Grid */}
