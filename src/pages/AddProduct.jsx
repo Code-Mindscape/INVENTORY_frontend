@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import ImageUploader from "./ImageUploader";
+import ImageUploader from "../components/ImageUploader";
 
 const AddProduct = ({ onClose, onProductAdded }) => {
   const [formData, setFormData] = useState({
