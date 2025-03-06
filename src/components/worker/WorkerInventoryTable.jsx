@@ -49,7 +49,13 @@ const WorkerInventoryTable = () => {
 
       {/* Search Input */}
       <div className="flex justify-between mb-4">
-
+        <input
+          type="text"
+          placeholder="Search products..."
+          className="border p-2 rounded-md w-full max-w-sm"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
       </div>
 
       {/* Product Cards Grid */}
