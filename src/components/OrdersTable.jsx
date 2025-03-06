@@ -68,7 +68,7 @@ const OrdersTable = () => {
               <p className="text-gray-700 text-sm mt-2">
                 Contact: <a href={`https://wa.me/${order.contact}`} className="text-blue-600 underline">{order.contact}</a>
               </p>
-              <p className="text-gray-700 text-sm">COD: {order.cod ? "Yes" : "No"}</p>
+              <p className="text-gray-700 text-sm">COD: {order.cod}</p>
               <p className="text-gray-700 text-sm">Worker: {order.workerID?.username || "Unknown"}</p>
             </div>
           ))}

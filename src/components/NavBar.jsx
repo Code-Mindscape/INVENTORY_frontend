@@ -80,13 +80,13 @@ function NavBar() {
 
       {/* Mobile Menu */}
       {isMenuOpen && (
-        <div className="md:hidden bg-gray-800 py-2">
+        <div className="md:hidden bg-green-900 py-2">
           <div className="px-4 space-y-2">
             {NAV_LINKS.map(({ name, href }) => (
               <a
                 key={href}
                 href={href}
-                className="block text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+                className="block text-gray-300 hover:bg-green-800 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
                 onClick={() => setIsMenuOpen(false)}
               >
                 {name}
