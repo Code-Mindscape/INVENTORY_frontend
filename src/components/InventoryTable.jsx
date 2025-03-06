@@ -85,7 +85,7 @@ const InventoryTable = () => {
                 {/* Image Box */}
                 <div className="w-full h-44 bg-gray-300 rounded-lg flex items-center justify-center text-gray-500">
                   {product.image ? (
-                    <img src={product.image} alt={product.name} className="h-full w-full object-cover rounded-lg" />
+                    <img src={product.imageUrl} alt={product.name} className="h-full w-full object-cover rounded-lg" />
                   ) : (
                     "No Image"
                   )}
