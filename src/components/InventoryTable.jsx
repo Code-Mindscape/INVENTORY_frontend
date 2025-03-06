@@ -8,6 +8,7 @@ const InventoryTable = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const productsPerPage = 8;
   const [totalPages, setTotalPages] = useState(1);
+  const [copiedId, setCopiedId] = useState(null);
 
   // Fetch products from the backend
   const fetchProducts = async (page) => {
@@ -36,6 +37,13 @@ const InventoryTable = () => {
   useEffect(() => {
     fetchProducts(currentPage);
   }, [currentPage]);
+
+  // Copy Product ID to clipboard
+  const copyToClipboard = (id) => {
+    navigator.clipboard.writeText(id);
+    setCopiedId(id);
+    setTimeout(() => setCopiedId(null), 2000); // Hide tooltip after 2 seconds
+  };
 
   return (
     <div className="p-6 mt-16">
@@ -71,7 +79,7 @@ const InventoryTable = () => {
             products.map((product) => (
               <div
                 key={product._id}
-                className="bg-white border border-gray-300 shadow-lg rounded-xl p-6 w-full transform transition duration-300"
+                className="bg-white border border-gray-300 shadow-lg rounded-xl p-6 w-full transform transition duration-300 hover:scale-105 relative"
                 style={{ minHeight: "450px" }}
               >
                 {/* Image Box */}
@@ -85,7 +93,20 @@ const InventoryTable = () => {
 
                 {/* Product Info */}
                 <h2 className="text-lg font-bold text-blue-800 mt-3">{product.name}</h2>
-                <p className="text-gray-700 text-sm font-medium">Product ID: {product._id}</p>
+
+                {/* Copyable Product ID */}
+                <div
+                  className="relative cursor-pointer text-gray-700 text-sm font-medium bg-gray-100 p-2 rounded-lg inline-block border border-gray-300 hover:bg-gray-200 transition"
+                  onClick={() => copyToClipboard(product._id)}
+                >
+                  Product ID: {product._id}
+                  {copiedId === product._id && (
+                    <span className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-black text-white text-xs px-2 py-1 rounded">
+                      Copied!
+                    </span>
+                  )}
+                </div>
+
                 <p className="text-gray-700 text-sm">Price: <span className="font-semibold text-green-700">${product.price}</span></p>
                 <p className={`text-sm font-semibold ${product.stock <= 0 ? "text-red-600" : "text-green-600"}`}>
                   {product.stock <= 0 ? "Out of Stock" : `Stock: ${product.stock}`}
