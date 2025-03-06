@@ -71,7 +71,7 @@ const InventoryTable = () => {
             products.map((product) => (
               <div
                 key={product._id}
-                className="bg-white border border-gray-300 shadow-lg rounded-xl p-6 w-full transform transition duration-300 hover:scale-105"
+                className="bg-white border border-gray-300 shadow-lg rounded-xl p-6 w-full transform transition duration-300"
                 style={{ minHeight: "450px" }}
               >
                 {/* Image Box */}
