@@ -11,18 +11,10 @@ const OrdersTable = () => {
       try {
         const response = await fetch(
           `https://inventorybackend-production-6c3c.up.railway.app/order/allOrders`,
-          {
-            credentials: "include",
-          }
+          { credentials: "include" }
         );
         const data = await response.json();
-        
-        if (Array.isArray(data.orders)) {
-          setOrders(data.orders);
-        } else {
-          console.error("Unexpected API response format:", data);
-          setOrders([]);
-        }
+        setOrders(Array.isArray(data.orders) ? data.orders : []);
       } catch (error) {
         console.error("Error fetching orders:", error);
         setOrders([]);
@@ -34,89 +26,82 @@ const OrdersTable = () => {
     fetchOrders();
   }, []);
 
-  const handleDeliveredChange = async (orderId, isChecked) => {
-    try {
-      const response = await fetch(
-        `https://inventorybackend-production-6c3c.up.railway.app/order/updateOrder/${orderId}`,
-        {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ delivered: isChecked }),
-          credentials: "include",
-        }
-      );
-      
-      if (!response.ok) throw new Error("Failed to update order status");
-      
-      setOrders((prevOrders) =>
-        prevOrders.map((order) =>
-          order._id === orderId ? { ...order, delivered: isChecked } : order
-        )
-      );
-    } catch (error) {
-      console.error("Error updating order status:", error);
-    }
-  };
-
+  // Pagination logic
   const indexOfLastOrder = currentPage * ordersPerPage;
   const indexOfFirstOrder = indexOfLastOrder - ordersPerPage;
   const currentOrders = orders.slice(indexOfFirstOrder, indexOfLastOrder);
   const totalPages = Math.ceil(orders.length / ordersPerPage);
 
   return (
-    <div className="mt-16 p-4">
+    <div className="p-4">
       {loading ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-          {[...Array(ordersPerPage)].map((_, index) => (
-            <div key={index} className="bg-gray-200 animate-pulse h-[300px] rounded-lg"></div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          {[...Array(8)].map((_, i) => (
+            <div key={i} className="h-64 bg-gray-200 animate-pulse rounded-lg"></div>
           ))}
         </div>
       ) : (
-        <>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-            {currentOrders.map((order) => (
-              <div key={order._id} className="bg-white shadow-lg rounded-lg p-4 w-[300px]">
-                <h2 className="font-bold text-lg">Order ID: {order._id}</h2>
-                <p className="text-sm text-gray-500">Customer: {order.customerName}</p>
-                <p className="text-sm">Product: {order.productID?.name || "N/A"}</p>
-                <p className="text-sm">Qty: {order.quantity}</p>
-                <p className="text-sm">Address: {order.address}</p>
-                <p className="text-sm text-green-500">
-                  <a href={`https://wa.me/${order.contact}`}>WhatsApp: {order.contact}</a>
-                </p>
-                <p className="text-sm">COD: {order.cod ? "Yes" : "No"}</p>
-                <p className="text-sm">Worker: {order.workerID?.username || "Unknown"}</p>
-                <div className="mt-2 flex items-center">
-                  <input
-                    type="checkbox"
-                    checked={order.delivered}
-                    onChange={(e) => handleDeliveredChange(order._id, e.target.checked)}
-                    className="mr-2"
-                  />
-                  <label>Delivered</label>
-                </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          {currentOrders.map((order, index) => (
+            <div
+              key={index}
+              className="bg-green-50 border border-green-200 shadow-md rounded-xl p-4 w-full"
+              style={{ minHeight: "350px" }}
+            >
+              {/* Image Box Placeholder */}
+              <div className="w-full h-36 bg-gray-300 rounded-lg flex items-center justify-center text-gray-500">
+                No Image
               </div>
-            ))}
-          </div>
-          <div className="flex justify-center mt-6">
-            <button
-              onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-              disabled={currentPage === 1}
-              className="px-4 py-2 mx-2 bg-gray-300 rounded disabled:opacity-50"
-            >
-              Previous
-            </button>
-            <span className="px-4 py-2">Page {currentPage} of {totalPages}</span>
-            <button
-              onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
-              disabled={currentPage === totalPages}
-              className="px-4 py-2 mx-2 bg-gray-300 rounded disabled:opacity-50"
-            >
-              Next
-            </button>
-          </div>
-        </>
+
+              <h2 className="text-lg font-bold text-green-800 mt-3">
+                Order ID: {order._id}
+              </h2>
+              <p className="text-gray-700 text-sm">Customer: {order.customerName}</p>
+              <p className="text-gray-700 text-sm">Product: {order.productID?.name || "N/A"}</p>
+              <p className="text-gray-700 text-sm">Qty: {order.quantity}</p>
+
+              {/* Larger Address Box */}
+              <div className="bg-white p-2 mt-2 rounded-lg border border-gray-300 text-gray-700 text-sm">
+                <strong>Address:</strong> {order.address}
+              </div>
+
+              <p className="text-gray-700 text-sm mt-2">
+                Contact:{" "}
+                <a href={`https://wa.me/${order.contact}`} className="text-green-600">
+                  {order.contact} (WhatsApp)
+                </a>
+              </p>
+              <p className="text-gray-700 text-sm">COD: {order.cod ? "Yes" : "No"}</p>
+              <p className="text-gray-700 text-sm">Worker: {order.workerID?.username || "Unknown"}</p>
+            </div>
+          ))}
+        </div>
       )}
+
+      {/* Pagination Controls */}
+      <div className="flex justify-center items-center mt-6 space-x-2">
+        <button
+          className={`px-3 py-2 text-sm font-semibold rounded-md ${
+            currentPage === 1 ? "bg-gray-300 cursor-not-allowed" : "bg-green-500 text-white hover:bg-green-600"
+          }`}
+          onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+          disabled={currentPage === 1}
+        >
+          Prev
+        </button>
+        <span className="text-green-700 font-bold">
+          Page {currentPage} of {totalPages}
+        </span>
+        <button
+          className={`px-3 py-2 text-sm font-semibold rounded-md ${
+            currentPage === totalPages ? "bg-gray-300 cursor-not-allowed" : "bg-green-500 text-white hover:bg-green-600"
+          }`}
+          onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+          disabled={currentPage === totalPages}
+        >
+          Next
+        </button>
+      </div>
     </div>
   );
 };
