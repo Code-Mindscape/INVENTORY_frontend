@@ -48,7 +48,7 @@ const AddProduct = ({ onClose, onProductAdded }) => {
       productData.append("description", formData.description);
       productData.append("image", formData.image); // ✅ Fixed file submission
 
-      const response = await axios.post("http://localhost:5000/product/addProduct", productData, {
+      const response = await axios.post("https://inventorybackend-production-6c3c.up.railway.app/product/addProduct", productData, {
         withCredentials: true,
         headers: { "Content-Type": "multipart/form-data" },
       });
