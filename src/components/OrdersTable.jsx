@@ -16,10 +16,11 @@ const OrdersTable = () => {
       );
       const data = await response.json();
       
-      if (Array.isArray(data.orders)) {
-        // Enforce a strict limit of 8 orders per page on the frontend
-        setOrders(data.orders.slice(0, ordersPerPage)); 
+      if (data.orders && Array.isArray(data.orders)) {
+        setOrders(data.orders.slice(0, ordersPerPage)); // Ensure only 8 orders are used
         setTotalPages(Math.ceil(data.totalCount / ordersPerPage));
+      } else {
+        setOrders([]);
       }
     } catch (error) {
       console.error("Error fetching orders:", error);
