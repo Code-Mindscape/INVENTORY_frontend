@@ -9,7 +9,7 @@ const AddProduct = ({ onClose, onProductAdded }) => {
     size: "",
     color: "",
     description: "",
-    imageUrl: null, // ⬅️ Changed from imageUrl to image (for file)
+    image: null, // ✅ Corrected from imageUrl to image
   });
 
   const [loading, setLoading] = useState(false);
@@ -31,7 +31,8 @@ const AddProduct = ({ onClose, onProductAdded }) => {
     setLoading(true);
     setError("");
 
-    if (!formData.name || !formData.price || !formData.stock || !formData.imageUrl) {
+    // ✅ Corrected validation check
+    if (!formData.name || !formData.price || !formData.stock || !formData.image) {
       setError("⚠️ Name, Price, Stock, and Image are required.");
       setLoading(false);
       return;
@@ -45,11 +46,11 @@ const AddProduct = ({ onClose, onProductAdded }) => {
       productData.append("size", formData.size);
       productData.append("color", formData.color);
       productData.append("description", formData.description);
-      productData.append("imageUrl", formData.imageUrl); // Send file to backend
+      productData.append("image", formData.image); // ✅ Fixed file submission
 
       const response = await axios.post("http://localhost:5000/product/addProduct", productData, {
         withCredentials: true,
-        headers: { "Content-Type": "multipart/form-data" }, // ✅ FormData header
+        headers: { "Content-Type": "multipart/form-data" },
       });
 
       onProductAdded();
@@ -82,7 +83,7 @@ const AddProduct = ({ onClose, onProductAdded }) => {
           <button type="button" className="bg-gray-400 text-white px-4 py-2 rounded-md" onClick={onClose}>
             Cancel
           </button>
-          <button type="submit" className={`px-4 py-2 rounded-md text-white ${loading ? "bg-gray-500" : "bg-blue-500"}`} disabled={loading || !formData.image}>
+          <button type="submit" className={`px-4 py-2 rounded-md text-white ${loading || !formData.image ? "bg-gray-500" : "bg-blue-500"}`} disabled={loading || !formData.image}>
             {loading ? "Adding..." : "Add Product"}
           </button>
         </div>
