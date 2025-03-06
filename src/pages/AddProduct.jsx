@@ -31,7 +31,7 @@ const AddProduct = ({ onClose, onProductAdded }) => {
     try {
       setLoading(true);
       const response = await axios.post(
-        `https://api.cloudinary.com/v1_1/YOUR_CLOUD_NAME/image/upload`, // ✅ Replace with your Cloudinary cloud name
+        `cloudinary://${process.env.VITE_CLOUD_API_KEY}:${process.env.VITE_CLOUD_API_SECRET}@dia4rgv1v`, // ✅ Replace with your Cloudinary cloud name
         formData
       );
       setFormData((prev) => ({ ...prev, imageUrl: response.data.secure_url })); // ✅ Set image URL
