@@ -77,7 +77,7 @@ const OrdersTable = () => {
                 <p className="text-gray-700 text-sm">Size: {order.productID?.size}</p>
                 <p className="text-gray-700 text-sm">Color: {order.productID?.color}</p>
                 <p className="text-gray-700 text-sm">Qty: {order.quantity}</p>
-                <p className="text-gray-700 text-sm">Qty: {order.dateAdded}</p>
+                <p className="text-gray-700 text-sm">Date: {order.dateAdded}</p>
                 <p className={`text-sm font-semibold ${order.delivered ? "text-green-600" : "text-red-600"}`}>
                   Status: {order.delivered ? "Delivered" : "Pending"}
                 </p>
