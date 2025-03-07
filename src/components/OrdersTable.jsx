@@ -87,13 +87,21 @@ const OrdersTable = () => {
               <div
                 key={order._id}
                 className="bg-green-200 border border-gray-300 shadow-lg rounded-xl p-6 w-full"
-                style={{ minHeight: "450px" }}
+                style={{ minHeight: "420px" }}
               >
-                <h2 className="text-xl font-bold text-green-800">Order ID: {order._id}</h2>
+                <div className="w-full h-44 bg-gray-300 rounded-lg flex items-center justify-center text-gray-500">
+                  No Image
+                </div>
+                <h2 className="text-xl font-bold text-green-800 mt-3">Order ID: {order._id}</h2>
                 <p className="text-gray-700 text-sm font-medium">Customer: {order.customerName}</p>
                 <p className="text-gray-700 text-sm">Product: {order.productID?.name}</p>
+                <p className="text-gray-700 text-sm">Size: {order.productID?.size}</p>
+                <p className="text-gray-700 text-sm">Color: {order.productID?.color}</p>
                 <p className="text-gray-700 text-sm">Qty: {order.quantity}</p>
                 <p className="text-gray-700 text-sm">Date: {order.dateAdded}</p>
+                <p className={`text-sm font-semibold ${order.delivered ? "text-green-600" : "text-red-600"}`}>
+                  Status: {order.delivered ? "Delivered" : "Pending"}
+                </p>
                 <div className="flex items-center gap-2 mt-2">
                   <label className="text-sm font-semibold">Delivered:</label>
                   <input
@@ -103,9 +111,14 @@ const OrdersTable = () => {
                     className="cursor-pointer"
                   />
                 </div>
+                <div className="bg-gray-100 p-3 mt-2 rounded-lg border border-gray-300 text-gray-700 text-sm break-words max-h-32 overflow-auto">
+                  <strong>Address:</strong> {order.address}
+                </div>
                 <p className="text-gray-700 text-sm mt-2">
                   Contact: <a href={`https://wa.me/${order.contact}`} className="text-blue-600 underline">{order.contact}</a>
                 </p>
+                <p className="text-gray-700 text-sm">COD: {order.cod}</p>
+                <p className="text-gray-700 text-sm">Worker: {order.workerID?.username || "Unknown"}</p>
               </div>
             ))
           ) : (
