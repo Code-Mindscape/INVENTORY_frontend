@@ -95,8 +95,7 @@ const OrdersTable = () => {
                 <div className="w-full h-44 bg-gray-300 rounded-lg flex items-center justify-center text-gray-500">
                   {order.productID?.imageUrl ? (
                     <img
-                      src={order.productID.imageUrl}
-                      alt={order.productID?.name || "Product"}
+                      src={order.productID?.imageUrl}
                       className="h-full w-full object-cover rounded-lg"
                     />
                   ) : (
