@@ -33,23 +33,24 @@ const OrdersTable = () => {
   };
 
   useEffect(() => {
-    fetchOrders(currentPage, searchQuery);
+    const delaySearch = setTimeout(() => {
+      fetchOrders(currentPage, searchQuery);
+    }, 500);
+
+    return () => clearTimeout(delaySearch);
   }, [currentPage, searchQuery]);
 
-  const handleDeliveredChange = async (id, delivered) => {
+  const handleDeliveredChange = async (orderId, delivered) => {
     try {
-      const response = await fetch(`https://inventorybackend-production-6c3c.up.railway.app/updateOrder/${id}`, {
+      const response = await fetch(`https://inventorybackend-production-6c3c.up.railway.app/order/updateOrder/${orderId}`, {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ delivered })
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ delivered }),
       });
-      const data = await response.json();
       if (response.ok) {
-        setOrders((prevOrders) =>
-          prevOrders.map((order) => (order._id === id ? { ...order, delivered } : order))
-        );
-      } else {
-        console.error("Error updating order:", data.message);
+        fetchOrders(currentPage, searchQuery);
       }
     } catch (error) {
       console.error("Error updating order:", error);
@@ -97,13 +98,13 @@ const OrdersTable = () => {
                 <p className={`text-sm font-semibold ${order.delivered ? "text-green-600" : "text-red-600"}`}>
                   Status: {order.delivered ? "Delivered" : "Pending"}
                 </p>
-                <label className="flex items-center space-x-2 mt-2">
+                <label className="flex items-center mt-2">
                   <input
                     type="checkbox"
                     checked={order.delivered}
                     onChange={(e) => handleDeliveredChange(order._id, e.target.checked)}
                   />
-                  <span className="text-sm">Mark as Delivered</span>
+                  <span className="ml-2 text-gray-700">Mark as Delivered</span>
                 </label>
                 <div className="bg-gray-100 p-3 mt-2 rounded-lg border border-gray-300 text-gray-700 text-sm break-words max-h-32 overflow-auto">
                   <strong>Address:</strong> {order.address}
