@@ -85,8 +85,13 @@ const OrdersTable = () => {
                 className="bg-green-200 border border-gray-300 shadow-lg rounded-xl p-6 w-full"
                 style={{ minHeight: "420px" }}
               >
-                <div className="w-full h-44 bg-gray-300 rounded-lg flex items-center justify-center text-gray-500">
-                  No Image
+              {/* Image Box */}
+              <div className="w-full h-44 bg-gray-300 rounded-lg flex items-center justify-center text-gray-500">
+                  {order.productID.imageUrl ? (
+                    <img src={order.productID?.imageUrl} alt={product.name} className="h-full w-full object-cover rounded-lg" />
+                  ) : (
+                    "No Image"
+                  )}
                 </div>
                 <h2 className="text-xl font-bold text-green-800 mt-3">Order ID: {order._id}</h2>
                 <p className="text-gray-700 text-sm font-medium">Customer: {order.customerName}</p>
