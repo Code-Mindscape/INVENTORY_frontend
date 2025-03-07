@@ -84,7 +84,6 @@ const WorkerOrdersTable = () => {
                     <img
                       src={order.productID.imageUrl}
                       className="h-full w-full object-cover rounded-lg"
-                      onError={(e) => (e.target.src = "/placeholder.png")} // Fallback image
                     />
                   ) : (
                     "No Image"
