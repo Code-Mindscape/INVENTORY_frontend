@@ -80,14 +80,17 @@ const WorkerOrdersTable = () => {
               className="bg-green-200 border border-gray-300 shadow-lg rounded-xl p-6 w-full"
               style={{ minHeight: "420px" }}
             >
-            {order.productID && order.productID.imageUrl ? (
+                 <div className="w-full h-44 bg-gray-300 rounded-lg flex items-center justify-center text-gray-500">
+                  {order.productID && order.productID.imageUrl ? (
                     <img
                       src={order.productID.imageUrl}
                       className="h-full w-full object-cover rounded-lg"
+                      onError={(e) => (e.target.src = "/placeholder.png")} // Fallback image
                     />
                   ) : (
                     "No Image"
-             )}
+                  )}
+                </div>
               <h2 className="text-xl font-bold text-green-800 mt-3">Order ID: {order._id}</h2>
               <p className="text-gray-700 text-sm font-medium">Customer: {order.customerName}</p>
               <p className="text-gray-700 text-sm">Product: {order.productID?.name}</p>
