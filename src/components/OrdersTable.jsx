@@ -33,7 +33,7 @@ const OrdersTable = () => {
   const updateOrderStatus = async (orderId, delivered) => {
     try {
       const response = await fetch(
-        `https://inventorybackend-production-6c3c.up.railway.app/updateOrder/${orderId}`,
+        `https://inventorybackend-production-6c3c.up.railway.app/order/updateOrder/${orderId}`,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
