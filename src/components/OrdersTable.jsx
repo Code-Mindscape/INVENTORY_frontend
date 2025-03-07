@@ -87,7 +87,7 @@ const OrdersTable = () => {
               >
               {/* Image Box */}
               <div className="w-full h-44 bg-gray-300 rounded-lg flex items-center justify-center text-gray-500">
-                  {order.productID.imageUrl ? (
+                  {order.productID?.imageUrl ? (
                     <img src={order.productID?.imageUrl} alt={product.name} className="h-full w-full object-cover rounded-lg" />
                   ) : (
                     "No Image"
